@@ -1,0 +1,31 @@
+{
+  "posts": [
+    {
+      "slug": "gemini-product-photography-guide",
+      "title": "This AI Just Replaced $10K Product Photography Shoots (And It's Free)",
+      "description": "How Gemini delivers studio-grade product photos in seconds.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-09-14",
+      "tags": [
+        "gemini-ai",
+        "product-photography",
+        "prompt-engineering",
+        "ai-workflows"
+      ],
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708969.png",
+      "category": "insights",
+      "featured": true,
+      "readTime": "16 min read",
+      "excerpt": "Discover why Gemini is the first serious challenger to commercial product photography, complete with prompts, examples, and troubleshooting tips.",
+      "seoTitle": "AI Photo Prompt Lab – Gemini Product Photography Guide",
+      "seoDescription": "Learn how Gemini delivers studio-grade product photography with ready-to-use prompts and techniques."
+    }
+  ],
+  "categories": [
+    {
+      "slug": "insights",
+      "title": "Insights",
+      "description": "Ideas, experiments, and workflows for Gemini AI photo prompts."
+    }
+  ]
+}

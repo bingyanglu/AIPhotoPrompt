@@ -1,0 +1,176 @@
+{
+  "categories": [
+    {
+      "slug": "figurine",
+      "title": "Figurine Conversions",
+      "description": "Transform portraits into collectible Gemini figurine renders",
+      "icon": "🧸",
+      "color": "yellow"
+    },
+    {
+      "slug": "product-scenes",
+      "title": "Product Scene Generators",
+      "description": "Gemini AI product campaigns with lush, story-driven environments",
+      "icon": "🛍️",
+      "color": "green"
+    },
+    {
+      "slug": "exploded-views",
+      "title": "Exploded Views",
+      "description": "High-impact Gemini technical breakdowns for hardware marketing",
+      "icon": "🧩",
+      "color": "purple"
+    },
+    {
+      "slug": "multi-fusion",
+      "title": "Multi-Scene Fusion",
+      "description": "Blend products, people, and props into lifestyle storytelling shots",
+      "icon": "🎛️",
+      "color": "blue"
+    }
+  ],
+  "prompts": [
+    {
+      "slug": "gemini-figurine-human",
+      "title": "Gemini Figurine Portrait",
+      "description": "Turn any portrait into a stylised collectible figurine with packaging and workstation details.",
+      "category": "figurine",
+      "difficulty": "beginner",
+      "featured": true,
+      "tags": [
+        "figurine",
+        "gemini",
+        "character"
+      ],
+      "useCase": "Character Merchandising",
+      "template": "Transform this portrait photo into a character figurine render.\n\nContext:\n- Input photo: [PHOTO_URL]\n- Character vibe: [STYLE] (e.g. cyberpunk hacker, pop star, heroic explorer)\n\nScene requirements:\n1. Figurine centered on a circular PVC base that looks glossy and premium.\n2. Behind the figurine, add a branded packaging box featuring the character artwork.\n3. On the left side, show a monitor displaying the 3D modeling process in Blender.\n4. Lighting should be bright studio lighting with moderate saturation to highlight details.\n5. Keep the shot indoors on a clean workstation with subtle depth of field.\n\nDeliver a 4K, square composition with crisp edges and playful toy aesthetics.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708971.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-figurine-anime",
+      "title": "Anime Figurine Twin Pack",
+      "description": "Create dual anime figurines from cosplay photography with Gemini.",
+      "category": "figurine",
+      "difficulty": "intermediate",
+      "featured": false,
+      "tags": [
+        "anime",
+        "figurine",
+        "gemini"
+      ],
+      "useCase": "Anime Collectibles",
+      "template": "Generate two matching anime-style figurines based on the source images.\n\nInputs:\n- Portrait 1: [PHOTO_URL_1]\n- Portrait 2: [PHOTO_URL_2]\n- Theme: [THEME] (e.g. neon idols, fantasy warriors)\n\nRendering directives:\n- Pose each figurine with complementary stances and expressive gestures.\n- Place both on coordinated bases with the same logo treatment.\n- Behind them, stack two packaging boxes showing individual character art.\n- Lighting should be punchy and saturated, simulating a convention display.\n- Keep materials glossy and colorful, with subtle rim lights to define silhouettes.\n\nReturn a 16:9 hero shot suitable for campaign key art.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708972.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-pet-food-moss",
+      "title": "Fresh Pet Food Moss Tableau",
+      "description": "Design a lush product scene with pet nutrition cues and storytelling props.",
+      "category": "product-scenes",
+      "difficulty": "intermediate",
+      "featured": true,
+      "tags": [
+        "product",
+        "pet-food",
+        "moss",
+        "gemini"
+      ],
+      "useCase": "Pet Nutrition Launches",
+      "template": "Product promotional image for premium pet food.\n\nScene blueprint:\n- Base environment: emerald moss-covered ground with pockets of ferns and dew.\n- Hero product: [PRODUCT_DESCRIPTION] placed center on a natural wood stump.\n- Supporting ingredients: fresh chicken breast, avocado slices, salmon portions, wooden bowl of freeze-dried chunks, scattered herbs.\n- Wildlife element: a well-groomed cat interacting with the product.\n- Background: soft blur of a forest log and dappled sunlight.\n- Lighting: simulate golden-hour outdoor light with gentle volumetric rays.\n\nFrame as a medium shot, 4:5 ratio, emphasising freshness and wholesome nutrition.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708976.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-snack-flatlay",
+      "title": "Sunlit Snack Flatlay",
+      "description": "Produce a picnic-inspired flatlay with vibrant food styling.",
+      "category": "product-scenes",
+      "difficulty": "beginner",
+      "featured": false,
+      "tags": [
+        "flatlay",
+        "snack",
+        "outdoor",
+        "gemini"
+      ],
+      "useCase": "Packaging Campaigns",
+      "template": "Create a flatlay hero shot for [SNACK_BRAND] seasonal packaging.\n\nComposition guide:\n- Camera angle: overhead, 90 degrees.\n- Surface: emerald moss layered with a wrinkled pastel tablecloth.\n- Central focus: wooden tray holding two product packages on a textured cloth.\n- Surrounding props: abundance of fresh strawberries, blueberries, cookies, and fruits arranged organically.\n- Accent: wicker flower basket with seasonal blooms in one corner.\n- Lighting: bright natural sunlight with alternating shadows and highlights.\n- Palette: vibrant reds, yellows, and greens balanced against the moss backdrop.\n\nDeliver as a 3:2 image optimized for e-commerce hero banners.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708980.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-home-appliance-lifestyle",
+      "title": "Cozy Appliance Lifestyle Scene",
+      "description": "Frame small appliances in warm, lived-in interiors with Gemini.",
+      "category": "product-scenes",
+      "difficulty": "intermediate",
+      "featured": false,
+      "tags": [
+        "appliance",
+        "lifestyle",
+        "interior",
+        "gemini"
+      ],
+      "useCase": "Home Goods Marketing",
+      "template": "Generate a lifestyle product shot for [APPLIANCE_NAME].\n\nScene details:\n- Location: sunlit living room with wooden cabinets, framed art, and thriving plants.\n- Hero setup: product centered on a hardwood console with complementary ceramics and glassware.\n- Human element: [MODEL_DESCRIPTION] casually enjoying the space (e.g. sipping coffee, reading).\n- Extra styling: soft textiles, books, decorative trays, and a cat or pet accent if relevant.\n- Lighting: soft directional sunlight creating gentle light/shadow interplay.\n- Mood: cozy, aspirational, high-end yet approachable.\n\nOutput a 4K horizontal composition ready for social and paid ads.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708983.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-exploded-view",
+      "title": "Cinematic Exploded View",
+      "description": "Showcase internal product engineering with floating component stacks.",
+      "category": "exploded-views",
+      "difficulty": "advanced",
+      "featured": true,
+      "tags": [
+        "exploded-view",
+        "hardware",
+        "gemini",
+        "tech"
+      ],
+      "useCase": "Hardware Launch Decks",
+      "template": "Render an ultra-detailed exploded view for [PRODUCT_NAME].\n\nSpecifications:\n- Orientation: horizontal linear layering with perfectly aligned components.\n- Materials: brushed metal, carbon fiber, glass, electronic boards.\n- Lighting: soft cinematic side lighting to reveal depth and precision.\n- Palette: cool futuristic tones (graphite, deep blue, silver) with subtle emissive accents.\n- Background: minimal gradient with volumetric haze for drama.\n- Labeling: leave clean space around layers for typography overlays.\n\nProduce an 8K image suitable for keynote slides and landing pages.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708991.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-office-breakfast-fusion",
+      "title": "Morning Workflow Fusion",
+      "description": "Blend multiple product categories into a cohesive office breakfast tableau.",
+      "category": "multi-fusion",
+      "difficulty": "advanced",
+      "featured": false,
+      "tags": [
+        "multi-product",
+        "lifestyle",
+        "fusion",
+        "gemini"
+      ],
+      "useCase": "Cross-Promotion",
+      "template": "Generate a multi-product lifestyle scene featuring [PRODUCT_A] and [PRODUCT_B].\n\nScene plan:\n- Setting: bright indoor workspace with sunlight streaming from the left.\n- Props: open laptop showing a web page, breakfast plate (croissant, fried egg, vegetables), steaming mug, scattered fruits, stacked books, pen holder, green plants.\n- Action: two hands interacting with the laptop, suggesting remote work.\n- Lighting: soft natural light with layered shadows, high saturation for a fresh feel.\n- Composition: 3/4 view focusing on the desktop, products centered with complementary props framing them.\n\nDeliver a 16:9 composition ready for hero banners.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708994.png",
+      "copyCount": 0
+    },
+    {
+      "slug": "gemini-character-consistency",
+      "title": "Character Consistency Series",
+      "description": "Maintain brand talent consistency across multiple Gemini lifestyle shots.",
+      "category": "multi-fusion",
+      "difficulty": "intermediate",
+      "featured": true,
+      "tags": [
+        "character",
+        "consistency",
+        "lifestyle",
+        "gemini"
+      ],
+      "useCase": "Talent Campaigns",
+      "template": "Create a set of three lifestyle images featuring the same talent interacting with [PRODUCT_NAME].\n\nGuidelines:\n- Source reference: [MODEL_REFERENCE_PHOTO]\n- Scene variations: [SCENE_1], [SCENE_2], [SCENE_3] (e.g. kitchen counter blow-dry, lounge chair coffee, standing by walnut cabinet).\n- Keep wardrobe cohesive with minor variations (color accents, accessories).\n- Ensure facial features, hairstyle, and proportions remain consistent across shots.\n- Lighting: warm indoor lighting with directional highlights to sculpt form.\n- Deliverable: horizontal triptych or individual 4:5 frames.",
+      "coverImage": "https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708999.png",
+      "copyCount": 0
+    }
+  ]
+}
