@@ -115,4 +115,7 @@ export default async function PromptsPage() {
 export const metadata: Metadata = {
   title: 'Gemini Prompts Library - Categories',
   description: 'Browse our collection of Gemini prompts organized by category. Copy and customize prompts for writing, coding, business, and more.',
+  alternates: {
+    canonical: 'https://www.aiphotoprompt.net/prompts',
+  },
 }

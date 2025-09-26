@@ -10,15 +10,15 @@ export const DEFAULT_SEO: SEOMetadata = {
   description: 'Join 10,000+ creators and get weekly Gemini AI photo prompt templates, guides, and product updates.',
   keywords: ['Gemini AI photo prompts', 'AI photography prompts', 'prompt engineering', 'AI photo guides'],
   author: 'AI Photo Prompt Lab Team',
-  canonicalUrl: 'https://aiphotopromptlab.com',
-  ogImage: 'https://aiphotopromptlab.com/images/og-image.png',
+  canonicalUrl: 'https://www.aiphotoprompt.net',
+  ogImage: 'https://www.aiphotoprompt.net/images/og-image.png',
   ogType: 'website',
   twitterCard: 'summary_large_image'
 }
 
 export const SITE_CONFIG = {
   name: 'AI Photo Prompt Lab',
-  url: 'https://aiphotopromptlab.com',
+  url: 'https://www.aiphotoprompt.net',
   description: DEFAULT_SEO.description,
   twitter: '@AIPhotoPromptLab',
   facebook: 'https://www.facebook.com/aiphotopromptlab',

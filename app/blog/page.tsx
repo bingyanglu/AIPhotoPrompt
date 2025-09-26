@@ -8,6 +8,9 @@ import { getBlogPosts, getBlogConfig } from '@/lib/content'
 export const metadata: Metadata = {
   title: 'Blog - AI Photo Prompt Lab',
   description: 'Latest Gemini AI photo prompt tips, tutorials, and insights for prompt engineers and creators.',
+  alternates: {
+    canonical: 'https://www.aiphotoprompt.net/blog',
+  },
 }
 
 export default async function BlogPage() {

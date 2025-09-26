@@ -9,6 +9,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 export const metadata: Metadata = {
   title: 'Gemini AI Photo Prompts – Copy & Paste Ready',
   description: 'Explore trending Gemini AI photo prompts curated for photographers and creatives. Copy & paste ready prompts for editing, travel, portraits, and more.',
+  alternates: {
+    canonical: 'https://www.aiphotoprompt.net/',
+  },
 }
 
 const benefits = [

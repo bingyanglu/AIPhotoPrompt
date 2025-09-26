@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
 import { getBlogPost, getBlogPosts } from '@/lib/content'
+import { generateBlogSEO } from '@/lib/seo'
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -18,14 +19,22 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: 'Article not found - AI Photo Prompt Lab'
+      title: 'Article not found - AI Photo Prompt Lab',
+      alternates: {
+        canonical: 'https://www.aiphotoprompt.net/blog',
+      },
     }
   }
 
-  return {
-    title: post.seoTitle || post.title,
-    description: post.seoDescription || post.description
-  }
+  return generateBlogSEO({
+    title: post.title,
+    description: post.description,
+    slug: post.slug,
+    author: post.author,
+    publishDate: post.publishDate,
+    tags: post.tags,
+    coverImage: post.coverImage,
+  })
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {

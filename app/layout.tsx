@@ -1,5 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import type { Metadata } from 'next'
 
 const inter = Inter({ 
@@ -15,6 +16,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'AI Photo Prompt Lab Team' }],
   creator: 'AI Photo Prompt Lab',
   publisher: 'AI Photo Prompt Lab',
+  alternates: {
+    canonical: 'https://www.aiphotoprompt.net',
+  },
   robots: {
     index: true,
     follow: true,
@@ -29,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://aiphotopromptlab.com',
+    url: 'https://www.aiphotoprompt.net',
     title: 'AI Photo Prompt Lab – Gemini AI Photo Prompts & Guides',
     description: 'Explore curated Gemini AI photo prompts and practical guides. Copy & paste templates, tutorials, and insights to elevate your creative workflow.',
     siteName: 'AI Photo Prompt Lab',
@@ -53,6 +57,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className={`${inter.className} antialiased`}>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-Z7RJH0N7PD"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Z7RJH0N7PD');
+          `}
+        </Script>
         <div id="root">
           {children}
         </div>
