@@ -1,0 +1,28 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leftGradient" x1="60" y1="20" x2="140" y2="236" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2F3CFF"/>
+      <stop offset="1" stop-color="#3DE4FF"/>
+    </linearGradient>
+    <linearGradient id="rightGradient" x1="196" y1="32" x2="112" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF2F8E"/>
+      <stop offset="1" stop-color="#FFA93D"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#111827" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="24" y="24" width="208" height="208" rx="64" fill="#0B1120" opacity="0.05"/>
+    <rect x="24" y="24" width="208" height="208" rx="64" stroke="#0F172A" stroke-opacity="0.12" stroke-width="2"/>
+  </g>
+
+  <circle cx="100" cy="128" r="72" fill="url(#leftGradient)"/>
+  <circle cx="156" cy="128" r="72" fill="url(#rightGradient)" opacity="0.9"/>
+
+  <g transform="translate(128 128)">
+    <circle r="32" fill="rgba(255,255,255,0.18)"/>
+    <path d="M0 -20 L5 -5 L20 0 L5 5 L0 20 L-5 5 L-20 0 L-5 -5 Z" fill="#FFFFFF"/>
+  </g>
+</svg>

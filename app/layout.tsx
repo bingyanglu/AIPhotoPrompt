@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.aiphotoprompt.net',
   },
+  icons: {
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
+  },
   robots: {
     index: true,
     follow: true,
