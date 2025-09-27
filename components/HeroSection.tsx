@@ -38,19 +38,25 @@ export default function HeroSection() {
         </div>
 
         <div className="flex-1 max-w-xl">
-          <div className="rounded-3xl border-2 border-gray-900 bg-white p-6 shadow-lg">
-            <div className="aspect-square w-full overflow-hidden rounded-2xl border border-gray-200 bg-gray-100">
-              <div className="flex h-full w-full items-end justify-between p-6 text-gray-800">
+          <figure className="overflow-hidden rounded-3xl border-2 border-gray-900 bg-white shadow-lg">
+            <div className="relative aspect-square">
+              <img
+                src="https://raw.githubusercontent.com/ludao-ai/imgs/master/imgs202509141708971.png"
+                alt="Gemini generated toy figurine display with branded packaging"
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6 text-white">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Gemini Output</p>
-                  <h2 className="mt-2 font-display text-2xl text-gray-900">Dreamy Couple Portrait</h2>
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/70">Gemini Output</p>
+                  <h2 className="mt-2 font-display text-2xl">Gemini Figurine Portrait</h2>
                 </div>
-                <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-600 shadow-sm">
-                  8K Ready
-                </span>
               </div>
             </div>
-          </div>
+            <figcaption className="border-t border-gray-200 bg-white p-6 text-sm text-gray-600">
+              Built with the Gemini figurine workflow prompt—complete with branded packaging, workstation lighting, and glossy PVC details ready for merch mockups.
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>
