@@ -20,12 +20,18 @@ export default function CategoryQuickLinks({ categories }: CategoryQuickLinksPro
           <ol className="max-h-[calc(100vh-260px)] space-y-5 overflow-y-auto pr-1">
             {categories.map((category) => (
               <li key={category.slug} className="space-y-2">
-                <Link
-                  href={`#category-prompts-${category.slug}`}
-                  className="block text-left text-sm font-semibold text-gray-900 transition-colors hover:text-primary-500"
-                >
-                  {category.title.replace(' Prompts', '')}
-                </Link>
+                {(() => {
+                  const [rawPrefix, rawFocus] = category.title.split(':').map((part) => part.trim())
+                  const displayTitle = rawFocus || rawPrefix || category.title
+                  return (
+                    <Link
+                      href={`#category-prompts-${category.slug}`}
+                      className="block text-left text-sm font-semibold text-gray-900 transition-colors hover:text-primary-500"
+                    >
+                      {displayTitle}
+                    </Link>
+                  )
+                })()}
                 {category.subcategories.length > 0 && (
                   <ul className="space-y-1.5 pl-3 text-sm text-gray-600">
                     {category.subcategories.slice(0, 20).map((subcategory) => {

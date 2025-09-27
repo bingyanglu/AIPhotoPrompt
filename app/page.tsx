@@ -60,6 +60,11 @@ const blogHighlights = [
     title: '$10K Product Shoots Without a Studio',
     description: 'Learn how Gemini delivers commercial-grade AI product photography with ready-to-use prompts.',
     href: '/blog/gemini-product-photography-guide'
+  },
+  {
+    title: 'Gemini Figurine Prompt Workflow',
+    description: 'Transform a screenshot into a collectible figurine scene using our Nano Banana prompt and iteration tips.',
+    href: '/blog/gemini-figurine-photo-prompt'
   }
 ]
 

@@ -1,6 +1,26 @@
 {
   "posts": [
     {
+      "slug": "gemini-figurine-photo-prompt",
+      "title": "Gemini AI Photo Prompt for Figurines: Turn a Screenshot into a Collectible Scene with Nano Banana",
+      "description": "Turn a game screenshot into a Gemini figurine render with Nano Banana and a reusable prompt.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-09-27",
+      "tags": [
+        "gemini-ai",
+        "figurine",
+        "nano-banana",
+        "prompt-workflow"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/09/eed7d5e1fbd05d1e7673a3c3ca82179c.png",
+      "category": "insights",
+      "featured": false,
+      "readTime": "5 min read",
+      "excerpt": "Upload a reference screenshot, paste the Nano Banana figurine prompt, and iterate until your collectible scene feels right.",
+      "seoTitle": "Gemini Figurine Prompt Workflow – AI Photo Prompt Lab",
+      "seoDescription": "Use Gemini’s Nano Banana model to turn any screenshot into a toy figurine scene with our step-by-step workflow and reusable prompt."
+    },
+    {
       "slug": "gemini-product-photography-guide",
       "title": "This AI Just Replaced $10K Product Photography Shoots (And It's Free)",
       "description": "How Gemini delivers studio-grade product photos in seconds.",

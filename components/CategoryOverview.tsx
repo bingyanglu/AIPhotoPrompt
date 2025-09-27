@@ -7,6 +7,9 @@ interface CategoryOverviewProps {
 
 function CategoryCard({ category }: { category: PromptCategorySummary }) {
   const topPrompts = category.prompts.slice(0, 6)
+  const [rawPrefix, rawFocus] = category.title.split(':').map((part) => part.trim())
+  const sectionPrefix = rawFocus ? rawPrefix : null
+  const sectionTitle = rawFocus || rawPrefix || category.title
 
   return (
     <div
@@ -14,8 +17,13 @@ function CategoryCard({ category }: { category: PromptCategorySummary }) {
       className="group flex h-full flex-col rounded-lg border-2 border-gray-900 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="mb-6 flex flex-col items-center text-center">
-        <p className="font-display text-base text-gray-800">
-          Gemini Prompts for {category.title.replace(' Prompts', '')}
+        {sectionPrefix && (
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+            {sectionPrefix}
+          </p>
+        )}
+        <p className="mt-1 font-display text-base text-gray-800">
+          {sectionTitle}
         </p>
         <p className="mt-2 text-sm text-gray-500">
           {category.promptCount} curated templates
