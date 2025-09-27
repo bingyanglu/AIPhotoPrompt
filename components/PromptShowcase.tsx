@@ -7,7 +7,9 @@ export interface ShowcasePrompt {
   title: string
   description: string
   prompt: string
-  color?: string
+  coverImage?: string
+  category?: string
+  useCase?: string
 }
 
 export default function PromptShowcase({ prompts }: { prompts: ShowcasePrompt[] }) {
@@ -35,13 +37,22 @@ function PromptCard({ prompt }: { prompt: ShowcasePrompt }) {
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-gray-900 bg-white">
-      <div className="h-36 border-b border-gray-200 bg-gray-100" aria-hidden>
-        <div className="flex h-full flex-col justify-between p-5 text-gray-700">
-          <span className="text-xs uppercase tracking-[0.25em] text-gray-500">Gemini Output</span>
-          <h3 className="font-display text-lg leading-tight text-gray-900">{prompt.title}</h3>
-        </div>
+      <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-gray-200 bg-gray-100">
+        {prompt.coverImage ? (
+          <img
+            src={prompt.coverImage}
+            alt={`${prompt.title} preview`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-200 via-white to-indigo-200">
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">Gemini Output</span>
+          </div>
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-4 p-6">
+        <h3 className="font-display text-lg leading-tight text-gray-900">{prompt.title}</h3>
         <p className="text-sm text-gray-600">{prompt.description}</p>
         <p className="line-clamp-6 flex-1 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-sm leading-relaxed text-gray-800">
           {prompt.prompt}

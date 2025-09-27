@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Script from 'next/script'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
 import PromptShowcase, { type ShowcasePrompt } from '@/components/PromptShowcase'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import { getPrompts } from '@/lib/content'
+import { SITE_CONFIG } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: 'Gemini AI Photo Prompts – Copy & Paste Ready',
@@ -33,67 +36,22 @@ const featuredCategories = [
   {
     title: 'Photo Editing',
     description: 'Make your photos stylish, polished, and gallery ready with pro-level prompts.',
-    href: '/prompts/photo-editing'
+    href: '/prompts'
   },
   {
     title: 'Trending Prompts',
     description: 'Stay on top of the viral looks shaping social feeds this week.',
-    href: '/prompts/trending'
+    href: '/prompts'
   },
   {
     title: 'Use Cases',
     description: 'Couples, portraits, travel, products – pick the scenario, paste the prompt.',
-    href: '/prompts/use-cases'
+    href: '/prompts'
   },
   {
     title: 'Google Gemini Official',
     description: 'Optimized spins on Google’s own Gemini photo prompts for sharper results.',
-    href: '/prompts/gemini-official'
-  }
-]
-
-const showcasePrompts: ShowcasePrompt[] = [
-  {
-    slug: 'dreamy-couple-portrait',
-    title: 'Dreamy Couple Portrait',
-    description: 'Soft-focus golden hour portrait with cinematic blur and warm film tones.',
-    prompt: '"gemini ai" portrait of a couple embracing at golden hour, cinematic depth of field, kodak ultramax color palette, dreamy lens flare, gentle smiles, soft wind in hair, rendered in 8k photo realism',
-    color: 'purple'
-  },
-  {
-    slug: 'urban-fashion-lookbook',
-    title: 'Urban Fashion Lookbook',
-    description: 'High-energy city fashion shot with editorial framing and neon highlights.',
-    prompt: '"gemini ai" full-body portrait of a model on a rainy tokyo street, neon reflections, vogue editorial lighting, fashion week energy, crisp focus, cinematic 2.35:1 crop, bold red accents',
-    color: 'blue'
-  },
-  {
-    slug: 'product-flatlay',
-    title: 'Product Flatlay Gradient',
-    description: 'Minimal product flatlay with gradients and soft shadows for e-commerce.',
-    prompt: '"gemini ai" top-down flatlay of skincare products on a gradient backdrop, soft studio shadows, reflective highlights, minimalist composition, text space on right side, apple commercial aesthetic',
-    color: 'green'
-  },
-  {
-    slug: 'travel-cinematic',
-    title: 'Cinematic Travel Vista',
-    description: 'Ultra-wide travel moment captured with moody clouds and dramatic contrast.',
-    prompt: '"gemini ai" traveler standing on cliff edge during sunrise, sweeping mountains, volumetric clouds, moody teal and orange grade, long exposure water, epic cinematic scope in 16:9',
-    color: 'indigo'
-  },
-  {
-    slug: 'studio-portrait',
-    title: 'Studio Beauty Portrait',
-    description: 'Beauty lighting with crisp details and reflective highlights for campaigns.',
-    prompt: '"gemini ai" beauty portrait of model with glossy skin, specular highlights, prismatic gel lighting, sharp macro focus on eyes, retouched yet natural, campaign-ready look',
-    color: 'yellow'
-  },
-  {
-    slug: 'moody-interior',
-    title: 'Moody Interior Story',
-    description: 'Interior scene styled with cinematic contrast and storytelling props.',
-    prompt: '"gemini ai" cinematic interior of a coffee shop at dusk, warm tungsten lighting, shallow depth of field, rain outside window, story-rich details on table, 35mm film grain finish',
-    color: 'red'
+    href: '/prompts'
   }
 ]
 
@@ -105,7 +63,58 @@ const blogHighlights = [
   }
 ]
 
-export default function HomePage() {
+export default async function HomePage() {
+  const siteDescription = metadata.description ?? 'Explore curated Gemini AI photo prompts and tutorials.'
+
+  const allPrompts = await getPrompts()
+  const featuredPrompts = allPrompts.filter((prompt) => prompt.featured)
+  const selectedPrompts = (featuredPrompts.length > 0 ? featuredPrompts : allPrompts).slice(0, 6)
+  const showcasePrompts: ShowcasePrompt[] = selectedPrompts.map((prompt) => ({
+    slug: prompt.slug,
+    title: prompt.title,
+    description: prompt.description,
+    prompt: prompt.template,
+    coverImage: prompt.coverImage,
+    category: prompt.category,
+    useCase: prompt.useCase,
+  }))
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    description: siteDescription,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE_CONFIG.url}/search?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How do I copy Gemini photo prompts quickly?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Every prompt card on AI Photo Prompt Lab includes an always-visible Copy Prompt button. Click once to capture the complete Gemini prompt with retro palettes, Polaroid framing, and lens cues ready to paste into your workflow.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What kinds of Gemini prompts are available?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The library spans trending saree portraits, cinematic travel vistas, product flatlays, and editing-ready looks. New Gemini prompt collections ship weekly so photographers can match client briefs faster.'
+        }
+      }
+    ]
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -164,7 +173,7 @@ export default function HomePage() {
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl text-gray-900">Why creators choose AI Photo Prompt Lab</h2>
               <p className="mt-3 text-base text-gray-600">
-                Gemini photo prompting without guesswork. Grab the exact wording, generate, and keep moving.
+                Gemini photo prompting without guesswork. Grab the exact wording, generate, and keep moving. Creators lean on our retro color grades, Polaroid-inspired framing, and saree portrait lighting recipes to match client briefs in minutes. Every prompt spells out composition, mood, and lens cues so you can skip trial-and-error and ship gallery-ready results.
               </p>
             </div>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
@@ -216,6 +225,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        <Script id="homepage-website-schema" type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
+        </Script>
+        <Script id="homepage-faq-schema" type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </Script>
       </main>
       <Footer />
     </div>
