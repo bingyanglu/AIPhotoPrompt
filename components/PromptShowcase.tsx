@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 export interface ShowcasePrompt {
   slug: string
@@ -35,9 +36,14 @@ function PromptCard({ prompt }: { prompt: ShowcasePrompt }) {
     }
   }
 
+  const detailHref = `/prompts#prompt-${prompt.slug}`
+
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-gray-900 bg-white">
-      <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-gray-200 bg-gray-100">
+      <Link
+        href={detailHref}
+        className="relative aspect-[4/3] w-full overflow-hidden border-b border-gray-200 bg-gray-100"
+      >
         {prompt.coverImage ? (
           <img
             src={prompt.coverImage}
@@ -50,9 +56,11 @@ function PromptCard({ prompt }: { prompt: ShowcasePrompt }) {
             <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">Gemini Output</span>
           </div>
         )}
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-4 p-6">
-        <h3 className="font-display text-lg leading-tight text-gray-900">{prompt.title}</h3>
+        <Link href={detailHref} className="font-display text-lg leading-tight text-gray-900 hover:text-gray-600">
+          {prompt.title}
+        </Link>
         <p className="text-sm text-gray-600">{prompt.description}</p>
         <p className="line-clamp-6 flex-1 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-sm leading-relaxed text-gray-800">
           {prompt.prompt}
