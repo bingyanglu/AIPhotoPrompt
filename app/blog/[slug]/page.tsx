@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
-import { getBlogPost, getBlogPosts } from '@/lib/content'
+import { getBlogPost, getBlogPosts, getPrompts } from '@/lib/content'
 import { generateBlogSEO } from '@/lib/seo'
 
 interface BlogPostPageProps {
@@ -47,6 +47,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const allPosts = await getBlogPosts()
   const related = allPosts.filter((item) => item.slug !== post.slug).slice(0, 3)
+  const promptPool = await getPrompts()
+  const recommendedPrompts = [...promptPool]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, Math.min(3, promptPool.length))
 
   const formattedDate = post.publishDate
     ? new Intl.DateTimeFormat('en-US', {
@@ -124,6 +128,56 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             />
           </div>
         </article>
+
+        {recommendedPrompts.length > 0 && (
+          <section className="bg-gray-50 py-20">
+            <div className="container-custom">
+              <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Prompt picks</span>
+                  <h2 className="mt-2 font-display text-3xl text-gray-900">Try these Gemini prompts next</h2>
+                </div>
+                <Link href="/prompts" className="text-sm font-semibold text-gray-600 transition-colors hover:text-gray-900">
+                  Browse all prompts →
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+                {recommendedPrompts.map((prompt) => (
+                  <article key={prompt.slug} className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-gray-900 bg-white">
+                    {prompt.coverImage && (
+                      <Link href={`/prompts#prompt-${prompt.slug}`} className="relative aspect-[4/3] w-full overflow-hidden border-b border-gray-200 bg-gray-100">
+                        <img
+                          src={prompt.coverImage}
+                          alt={prompt.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+                        />
+                      </Link>
+                    )}
+                    <div className="flex flex-1 flex-col gap-4 p-6">
+                      <div>
+                        <h3 className="font-display text-xl text-gray-900">{prompt.title}</h3>
+                        <p className="mt-2 text-sm text-gray-600 line-clamp-3">{prompt.description}</p>
+                      </div>
+                      <div className="mt-auto flex justify-between text-xs text-gray-500">
+                        <span className="rounded-full border border-gray-200 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-500">
+                          {prompt.useCase || 'Gemini Prompt'}
+                        </span>
+                        <Link
+                          href={`/prompts#prompt-${prompt.slug}`}
+                          className="inline-flex items-center gap-1 font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
+                        >
+                          View prompt
+                          <span aria-hidden>→</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {related.length > 0 && (
           <section className="bg-gray-50 py-20">
