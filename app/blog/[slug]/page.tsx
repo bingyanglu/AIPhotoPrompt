@@ -129,8 +129,29 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </article>
 
-        {recommendedPrompts.length > 0 && (
+        {related.length > 0 && (
           <section className="bg-gray-50 py-20">
+            <div className="container-custom">
+              <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Keep reading</span>
+                  <h2 className="mt-2 font-display text-3xl text-gray-900">More articles from AI Photo Prompt Lab</h2>
+                </div>
+                <Link href="/blog" className="text-sm font-semibold text-gray-600 transition-colors hover:text-gray-900">
+                  View all articles →
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+                {related.map((item) => (
+                  <BlogCard key={item.slug} post={item} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {recommendedPrompts.length > 0 && (
+          <section className="bg-white py-20">
             <div className="container-custom">
               <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -159,13 +180,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <h3 className="font-display text-xl text-gray-900">{prompt.title}</h3>
                         <p className="mt-2 text-sm text-gray-600 line-clamp-3">{prompt.description}</p>
                       </div>
-                      <div className="mt-auto flex justify-between text-xs text-gray-500">
-                        <span className="rounded-full border border-gray-200 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-500">
-                          {prompt.useCase || 'Gemini Prompt'}
-                        </span>
+                      <div className="mt-auto flex justify-end">
                         <Link
                           href={`/prompts#prompt-${prompt.slug}`}
-                          className="inline-flex items-center gap-1 font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
                         >
                           View prompt
                           <span aria-hidden>→</span>
@@ -173,27 +191,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       </div>
                     </div>
                   </article>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {related.length > 0 && (
-          <section className="bg-gray-50 py-20">
-            <div className="container-custom">
-              <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Keep reading</span>
-                  <h2 className="mt-2 font-display text-3xl text-gray-900">More articles from AI Photo Prompt Lab</h2>
-                </div>
-                <Link href="/blog" className="text-sm font-semibold text-gray-600 transition-colors hover:text-gray-900">
-                  View all articles →
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {related.map((item) => (
-                  <BlogCard key={item.slug} post={item} />
                 ))}
               </div>
             </div>
