@@ -13,6 +13,13 @@ export interface ShowcasePrompt {
   useCase?: string
 }
 
+const BLOG_LINKS: Record<string, { href: string; label: string }> = {
+  'gemini-black-myth-figurine': {
+    href: '/blog/gemini-figurine-photo-prompt',
+    label: 'Read the figurine workflow guide'
+  }
+}
+
 export default function PromptShowcase({ prompts }: { prompts: ShowcasePrompt[] }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -65,13 +72,24 @@ function PromptCard({ prompt }: { prompt: ShowcasePrompt }) {
         <p className="line-clamp-6 flex-1 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-sm leading-relaxed text-gray-800">
           {prompt.prompt}
         </p>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className={`inline-flex items-center justify-center gap-2 rounded-md border-2 px-4 py-2 text-sm font-semibold transition-colors ${isCopied ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-900 bg-gray-900 text-white hover:bg-white hover:text-gray-900'}`}
-        >
-          {isCopied ? 'Copied!' : 'Copy prompt'}
-        </button>
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <button
+            type="button"
+            onClick={handleCopy}
+            className={`inline-flex items-center justify-center gap-2 rounded-md border-2 px-4 py-2 text-sm font-semibold transition-colors ${isCopied ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-900 bg-gray-900 text-white hover:bg-white hover:text-gray-900'}`}
+          >
+            {isCopied ? 'Copied!' : 'Copy prompt'}
+          </button>
+          {BLOG_LINKS[prompt.slug] && (
+            <Link
+              href={BLOG_LINKS[prompt.slug].href}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
+            >
+              {BLOG_LINKS[prompt.slug].label}
+              <span aria-hidden>→</span>
+            </Link>
+          )}
+        </div>
       </div>
     </article>
   )
