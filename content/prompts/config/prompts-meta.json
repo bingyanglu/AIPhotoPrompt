@@ -70,7 +70,7 @@
       "description": "Game character figurine prompt for Gemini Nano Banana that turns a Black Myth: Zhong Kui screenshot into a collectible display scene.",
       "category": "figurine",
       "difficulty": "intermediate",
-      "featured": false,
+      "featured": true,
       "tags": [
         "figurine",
         "nano-banana",
