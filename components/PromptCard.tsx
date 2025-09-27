@@ -1,10 +1,18 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { Prompt } from '@/lib/types'
 
 interface PromptCardProps {
   prompt: Prompt
+}
+
+const BLOG_LINKS: Record<string, { href: string; label: string }> = {
+  'gemini-black-myth-figurine': {
+    href: '/blog/gemini-figurine-photo-prompt',
+    label: 'Read the figurine workflow guide'
+  }
 }
 
 export default function PromptCard({ prompt }: PromptCardProps) {
@@ -95,9 +103,20 @@ export default function PromptCard({ prompt }: PromptCardProps) {
             {copied ? 'Copied!' : 'Copy prompt'}
           </button>
         </div>
-        <p className="text-right text-xs font-medium text-gray-500">
-          Copied {copyCount} {copyCount === 1 ? 'time' : 'times'}
-        </p>
+        <div className="flex flex-col gap-2 text-right text-xs font-medium text-gray-500">
+          <p>
+            Copied {copyCount} {copyCount === 1 ? 'time' : 'times'}
+          </p>
+          {BLOG_LINKS[prompt.slug] && (
+            <Link
+              href={BLOG_LINKS[prompt.slug].href}
+              className="inline-flex items-center justify-end gap-1 text-xs font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
+            >
+              {BLOG_LINKS[prompt.slug].label}
+              <span aria-hidden>→</span>
+            </Link>
+          )}
+        </div>
       </div>
     </article>
   )

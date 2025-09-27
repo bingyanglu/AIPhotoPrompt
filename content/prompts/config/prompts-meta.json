@@ -65,6 +65,24 @@
       "copyCount": 0
     },
     {
+      "slug": "gemini-black-myth-figurine",
+      "title": "Gemini Figurine Prompt: Black Myth Zhong Kui",
+      "description": "Game character figurine prompt for Gemini Nano Banana that turns a Black Myth: Zhong Kui screenshot into a collectible display scene.",
+      "category": "figurine",
+      "difficulty": "intermediate",
+      "featured": false,
+      "tags": [
+        "figurine",
+        "nano-banana",
+        "gemini",
+        "game"
+      ],
+      "useCase": "Game Character Figurine Prompts",
+      "template": "Please turn this screenshot of the game character into a character figure riding on an Asian tiger. Behind it, place a PlayStation game box printed with the character's image and the game title 'Black Myth: Zhong Kui.' Next to it, add a computer with its screen displaying the in-game scene, complete with the game's UI and the character. In front of the game box, add a round plastic base for the figure and have it stand on it. The PVC material of the base should have a crystal-clear, translucent texture, and set the entire scene indoors.",
+      "coverImage": "https://img.aiphotoprompt.net/2025/09/fc15235fc51894d44a75dbb76d530d71.png",
+      "copyCount": 0
+    },
+    {
       "slug": "gemini-pet-food-moss",
       "title": "Gemini Pet Food Moss Tableau",
       "description": "Copy & paste Gemini AI photo prompt for lush pet-food campaigns with fresh nutrition storytelling props.",
