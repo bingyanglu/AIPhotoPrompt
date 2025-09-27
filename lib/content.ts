@@ -340,7 +340,7 @@ export async function generateSitemap(): Promise<string[]> {
     const urls: string[] = []
     
     // 静态页面
-    urls.push('/', '/prompts', '/blog')
+    urls.push('/', '/prompts', '/blog', '/legal/privacy-policy', '/legal/terms-of-service')
     
     // 博客文章
     const posts = await getBlogPosts()
