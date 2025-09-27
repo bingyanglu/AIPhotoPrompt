@@ -49,3 +49,5 @@ stylelintcache
 
 # Generated assets
 public/static/
+# Project data exports (local analysis only)
+data/
