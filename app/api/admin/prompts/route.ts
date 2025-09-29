@@ -12,7 +12,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const sessionCookie = cookies().get(getAdminSessionCookieName())?.value
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get(getAdminSessionCookieName())?.value
     const session = await verifyAdminSessionToken(sessionCookie)
 
     if (!session) {

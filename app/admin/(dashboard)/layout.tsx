@@ -6,7 +6,8 @@ import { getAdminSessionCookieName, verifyAdminSessionToken } from '@/lib/auth/a
 import AdminSidebar from './sidebar'
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const sessionCookie = cookies().get(getAdminSessionCookieName())?.value
+  const cookieStore = await cookies()
+  const sessionCookie = cookieStore.get(getAdminSessionCookieName())?.value
   const session = await verifyAdminSessionToken(sessionCookie)
 
   if (!session) {
