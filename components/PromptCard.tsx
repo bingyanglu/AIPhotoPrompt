@@ -40,6 +40,9 @@ export default function PromptCard({ prompt }: PromptCardProps) {
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(`prompt-copy-count:${prompt.slug}`, String(next))
       }
+      void fetch(`/api/prompts/${prompt.slug}/copy`, { method: 'POST' }).catch((error) => {
+        console.error('Failed to record copy count', error)
+      })
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
       console.error('Failed to copy prompt', error)

@@ -1,21 +1,23 @@
 import fs from 'fs'
 import path from 'path'
-import { 
-  parseMarkdownFile, 
+import {
+  parseMarkdownFile,
   parseMarkdownDirectory,
   validateFrontmatter,
   generateContentMetadata
 } from './mdx'
-import { 
-  BlogPost, 
-  Prompt, 
+import {
+  BlogPost,
+  Prompt,
   Resource,
   BlogConfig,
   PromptConfig,
   ResourceConfig,
   ContentQuery,
-  SearchResult
+  SearchResult,
+  PromptCategory
 } from './types'
+import { getSupabaseClient, isSupabaseConfigured } from './supabase/client'
 
 // ========================================
 // 路径配置
@@ -24,6 +26,7 @@ import {
 const CONTENT_DIR = path.join(process.cwd(), 'content')
 const BLOG_DIR = path.join(CONTENT_DIR, 'blog')
 const PROMPTS_DIR = path.join(CONTENT_DIR, 'prompts')
+const PROMPTS_CONFIG_PATH = path.join(PROMPTS_DIR, 'config', 'prompts-meta.json')
 const RESOURCES_DIR = path.join(CONTENT_DIR, 'resources')
 
 // ========================================
@@ -111,61 +114,199 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
 // 提示词内容管理
 // ========================================
 
-export async function getPromptConfig(): Promise<PromptConfig> {
-  const configPath = path.join(PROMPTS_DIR, 'config', 'prompts-meta.json')
-  return readJSONConfig<PromptConfig>(configPath)
+async function getPromptCategoriesFromSupabase(): Promise<PromptCategory[]> {
+  const supabase = getSupabaseClient()
+  const { data, error } = await supabase
+    .from('prompt_categories')
+    .select('slug, title, description, icon, color, display_order')
+    .order('display_order', { ascending: true })
+
+  if (error) {
+    console.error('Supabase error fetching prompt categories:', error)
+    throw error
+  }
+
+  return (data ?? []).map((category) => ({
+    slug: category.slug,
+    title: category.title,
+    description: category.description ?? '',
+    icon: category.icon ?? '✨',
+    color: (category.color ?? 'blue') as PromptCategory['color']
+  }))
+}
+
+export async function getPromptCategories(): Promise<PromptCategory[]> {
+  if (!isSupabaseConfigured) {
+    try {
+      const config = await readJSONConfig<PromptConfig>(PROMPTS_CONFIG_PATH)
+      return config.categories || []
+    } catch (error) {
+      console.error('Error getting prompt categories from JSON:', error)
+      return []
+    }
+  }
+
+  try {
+    return await getPromptCategoriesFromSupabase()
+  } catch (error) {
+    console.error('Error getting prompt categories from Supabase:', error)
+    return []
+  }
+}
+
+async function getPromptsFromSupabase(): Promise<Prompt[]> {
+  const supabase = getSupabaseClient()
+  const { data, error } = await supabase
+    .from('prompts')
+    .select(`
+      slug,
+      title,
+      description,
+      template,
+      cover_image,
+      use_case,
+      difficulty,
+      tags,
+      featured,
+      copy_count,
+      prompt_categories ( slug )
+    `)
+    .order('featured', { ascending: false })
+    .order('title', { ascending: true })
+
+  if (error) {
+    console.error('Supabase error fetching prompts:', error)
+    throw error
+  }
+
+  return (data ?? []).map((prompt) => ({
+    slug: prompt.slug,
+    title: prompt.title,
+    description: prompt.description ?? '',
+    template: prompt.template,
+    coverImage: prompt.cover_image ?? undefined,
+    category: prompt.prompt_categories?.slug ?? '',
+    useCase: prompt.use_case ?? '',
+    difficulty: (prompt.difficulty ?? 'beginner') as Prompt['difficulty'],
+    tags: prompt.tags ?? [],
+    featured: prompt.featured ?? false,
+    copyCount: prompt.copy_count ?? 0
+  }))
 }
 
 export async function getPrompts(): Promise<Prompt[]> {
+  if (!isSupabaseConfigured) {
+    try {
+      const config = await readJSONConfig<PromptConfig>(PROMPTS_CONFIG_PATH)
+      return config.prompts.sort((a, b) => {
+        if (a.featured && !b.featured) return -1
+        if (!a.featured && b.featured) return 1
+        return a.title.localeCompare(b.title)
+      })
+    } catch (error) {
+      console.error('Error getting prompts from JSON:', error)
+      return []
+    }
+  }
+
   try {
-    const config = await getPromptConfig()
-    return config.prompts.sort((a, b) => {
-      if (a.featured && !b.featured) return -1
-      if (!a.featured && b.featured) return 1
-      return a.title.localeCompare(b.title)
-    })
+    return await getPromptsFromSupabase()
   } catch (error) {
-    console.error('Error getting prompts:', error)
+    console.error('Error getting prompts from Supabase:', error)
     return []
   }
 }
 
 export async function getPrompt(slug: string): Promise<Prompt | null> {
-  try {
-    const prompts = await getPrompts()
-    const promptMeta = prompts.find(prompt => prompt.slug === slug)
-    
-    if (!promptMeta) {
+  if (!isSupabaseConfigured) {
+    try {
+      const prompts = await getPrompts()
+      const promptMeta = prompts.find((prompt) => prompt.slug === slug)
+
+      if (!promptMeta) {
+        return null
+      }
+
+      const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)
+      if (fs.existsSync(promptPath)) {
+        await parseMarkdownFile(promptPath)
+      }
+      return promptMeta
+    } catch (error) {
+      console.error(`Error getting prompt ${slug} from JSON:`, error)
       return null
     }
-    
-    // 尝试读取 Markdown 内容
-    const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)
-    
-    if (fs.existsSync(promptPath)) {
-      const { htmlContent } = await parseMarkdownFile(promptPath)
-      return promptMeta
+  }
+
+  try {
+    const supabase = getSupabaseClient()
+    const { data, error } = await supabase
+      .from('prompts')
+      .select(`
+        slug,
+        title,
+        description,
+        template,
+        cover_image,
+        use_case,
+        difficulty,
+        tags,
+        featured,
+        copy_count,
+        prompt_categories ( slug )
+      `)
+      .eq('slug', slug)
+      .maybeSingle()
+
+    if (error) {
+      console.error(`Supabase error fetching prompt ${slug}:`, error)
+      return null
     }
-    
+
+    if (!data) {
+      return null
+    }
+
+    const promptMeta: Prompt = {
+      slug: data.slug,
+      title: data.title,
+      description: data.description ?? '',
+      template: data.template,
+      coverImage: data.cover_image ?? undefined,
+      category: data.prompt_categories?.slug ?? '',
+      useCase: data.use_case ?? '',
+      difficulty: (data.difficulty ?? 'beginner') as Prompt['difficulty'],
+      tags: data.tags ?? [],
+      featured: data.featured ?? false,
+      copyCount: data.copy_count ?? 0
+    }
+
+    const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)
+    if (fs.existsSync(promptPath)) {
+      await parseMarkdownFile(promptPath)
+    }
+
     return promptMeta
   } catch (error) {
-    console.error(`Error getting prompt ${slug}:`, error)
+    console.error(`Error getting prompt ${slug} from Supabase:`, error)
     return null
   }
 }
 
 export async function getPromptsByCategory(category: string): Promise<Prompt[]> {
   const prompts = await getPrompts()
-  return prompts.filter(prompt => prompt.category === category)
+  return prompts.filter((prompt) => prompt.category === category)
 }
 
-export async function getPromptCategories() {
-  try {
-    const config = await getPromptConfig()
-    return config.categories || []
-  } catch (error) {
-    console.error('Error getting prompt categories:', error)
-    return []
+export async function getPromptConfig(): Promise<PromptConfig> {
+  const [categories, prompts] = await Promise.all([
+    getPromptCategories(),
+    getPrompts()
+  ])
+
+  return {
+    categories,
+    prompts
   }
 }
 
