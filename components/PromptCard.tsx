@@ -63,12 +63,12 @@ export default function PromptCard({ prompt }: PromptCardProps) {
             href={prompt.coverImage}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative block"
+            className="group relative block aspect-[4/3]"
           >
             <img
               src={prompt.coverImage}
               alt={prompt.title}
-              className="h-56 w-full object-cover object-center transition-transform duration-200 group-hover:scale-[1.02] md:h-64"
+              className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-[1.02]"
               loading="lazy"
             />
             <span className="sr-only">View full size image</span>
