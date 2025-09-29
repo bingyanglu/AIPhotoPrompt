@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server'
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase/client'
 
-export async function POST(_request: Request, { params }: { params: { slug: string } }) {
+interface RouteParams {
+  params: Promise<{
+    slug: string
+  }>
+}
+
+export async function POST(_request: Request, context: RouteParams) {
+  const { slug } = await context.params
+
   if (!isSupabaseServiceConfigured) {
     return NextResponse.json({ success: false, reason: 'supabase service role key not configured' }, { status: 200 })
   }
-
-  const { slug } = params
   if (!slug) {
     return NextResponse.json({ success: false, reason: 'missing slug' }, { status: 400 })
   }
