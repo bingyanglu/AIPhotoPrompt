@@ -154,6 +154,20 @@ export async function getPromptCategories(): Promise<PromptCategory[]> {
   }
 }
 
+type PromptRow = {
+  slug: string
+  title: string
+  description: string | null
+  template: string
+  cover_image: string | null
+  use_case: string | null
+  difficulty: string | null
+  tags: string[] | null
+  featured: boolean | null
+  copy_count: number | null
+  prompt_categories: { slug: string }[] | { slug: string } | null
+}
+
 async function getPromptsFromSupabase(): Promise<Prompt[]> {
   const supabase = getSupabaseClient()
   const { data, error } = await supabase
@@ -169,7 +183,7 @@ async function getPromptsFromSupabase(): Promise<Prompt[]> {
       tags,
       featured,
       copy_count,
-      prompt_categories ( slug )
+      prompt_categories:prompt_categories!inner ( slug )
     `)
     .order('featured', { ascending: false })
     .order('title', { ascending: true })
@@ -179,13 +193,17 @@ async function getPromptsFromSupabase(): Promise<Prompt[]> {
     throw error
   }
 
-  return (data ?? []).map((prompt) => ({
+  const rows = (data ?? []) as PromptRow[]
+
+  return rows.map((prompt) => ({
     slug: prompt.slug,
     title: prompt.title,
     description: prompt.description ?? '',
     template: prompt.template,
     coverImage: prompt.cover_image ?? undefined,
-    category: prompt.prompt_categories?.slug ?? '',
+    category: Array.isArray(prompt.prompt_categories)
+      ? prompt.prompt_categories[0]?.slug ?? ''
+      : prompt.prompt_categories?.slug ?? '',
     useCase: prompt.use_case ?? '',
     difficulty: (prompt.difficulty ?? 'beginner') as Prompt['difficulty'],
     tags: prompt.tags ?? [],
@@ -253,7 +271,7 @@ export async function getPrompt(slug: string): Promise<Prompt | null> {
         tags,
         featured,
         copy_count,
-        prompt_categories ( slug )
+        prompt_categories:prompt_categories!inner ( slug )
       `)
       .eq('slug', slug)
       .maybeSingle()
@@ -263,22 +281,27 @@ export async function getPrompt(slug: string): Promise<Prompt | null> {
       return null
     }
 
-    if (!data) {
+    const row = (data ?? null) as PromptRow | null
+    if (!row) {
       return null
     }
 
+    const categorySlug = Array.isArray(row.prompt_categories)
+      ? row.prompt_categories[0]?.slug ?? ''
+      : row.prompt_categories?.slug ?? ''
+
     const promptMeta: Prompt = {
-      slug: data.slug,
-      title: data.title,
-      description: data.description ?? '',
-      template: data.template,
-      coverImage: data.cover_image ?? undefined,
-      category: data.prompt_categories?.slug ?? '',
-      useCase: data.use_case ?? '',
-      difficulty: (data.difficulty ?? 'beginner') as Prompt['difficulty'],
-      tags: data.tags ?? [],
-      featured: data.featured ?? false,
-      copyCount: data.copy_count ?? 0
+      slug: row.slug,
+      title: row.title,
+      description: row.description ?? '',
+      template: row.template,
+      coverImage: row.cover_image ?? undefined,
+      category: categorySlug,
+      useCase: row.use_case ?? '',
+      difficulty: (row.difficulty ?? 'beginner') as Prompt['difficulty'],
+      tags: row.tags ?? [],
+      featured: row.featured ?? false,
+      copyCount: row.copy_count ?? 0
     }
 
     const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)

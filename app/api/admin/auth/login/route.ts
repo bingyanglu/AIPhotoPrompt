@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Invalid username or password' }, { status: 401 })
     }
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const { token, maxAge } = await createAdminSessionCookie(usernameEnv)
     cookieStore.set(getAdminSessionCookieName(), token, {
       httpOnly: true,

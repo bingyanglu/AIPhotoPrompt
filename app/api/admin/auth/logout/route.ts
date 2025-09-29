@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { getAdminSessionCookieName } from '@/lib/auth/admin-session'
 
 export async function POST() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.set(getAdminSessionCookieName(), '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
