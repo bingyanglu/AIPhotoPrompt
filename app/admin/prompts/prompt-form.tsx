@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { PromptCategory } from '@/lib/types'
 
 interface PromptFormProps {
@@ -8,6 +9,7 @@ interface PromptFormProps {
 }
 
 export default function PromptForm({ categories }: PromptFormProps) {
+  const router = useRouter()
   const [form, setForm] = useState({
     slug: '',
     title: '',
@@ -23,6 +25,26 @@ export default function PromptForm({ categories }: PromptFormProps) {
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [authorized, setAuthorized] = useState(false)
+
+  useEffect(() => {
+    const adminToken = process.env.NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
+    if (!adminToken) {
+      router.replace('/admin/login')
+      return
+    }
+
+    if (typeof window === 'undefined') return
+
+    const stored = window.localStorage.getItem('admin-token')
+    if (stored !== adminToken) {
+      router.replace('/admin/login')
+      return
+    }
+
+    setAuthorized(true)
+    setForm((prev) => ({ ...prev, token: stored ?? '' }))
+  }, [router])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = event.target
@@ -77,6 +99,14 @@ export default function PromptForm({ categories }: PromptFormProps) {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (!authorized) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+        <p className="text-sm text-gray-600">正在验证管理员访问权限…</p>
+      </div>
+    )
   }
 
   return (

@@ -9,15 +9,31 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
+  const adminToken = process.env.NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
+
+  if (!adminToken) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+        <div className="max-w-lg text-center">
+          <h1 className="font-display text-3xl text-gray-900">缺少管理员令牌配置</h1>
+          <p className="mt-4 text-sm text-gray-600">
+            请先在环境变量中设置 <code className="rounded bg-gray-100 px-2 py-1 text-xs">NEXT_PUBLIC_ADMIN_ACCESS_TOKEN</code>。
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
     setError(null)
 
-    const adminToken = process.env.NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
-
-    if (adminToken && token.trim() === adminToken) {
-      router.push('/admin/prompts')
+    if (token.trim() === adminToken) {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('admin-token', token.trim())
+      }
+      router.replace('/admin/prompts')
     } else {
       setError('访问令牌不正确，请重试。')
     }
