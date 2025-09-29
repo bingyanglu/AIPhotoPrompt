@@ -5,57 +5,67 @@ import { useRouter } from 'next/navigation'
 
 export default function AdminLoginPage() {
   const router = useRouter()
-  const [token, setToken] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const adminToken = process.env.NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
-
-  if (!adminToken) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-        <div className="max-w-lg text-center">
-          <h1 className="font-display text-3xl text-gray-900">缺少管理员令牌配置</h1>
-          <p className="mt-4 text-sm text-gray-600">
-            请先在环境变量中设置 <code className="rounded bg-gray-100 px-2 py-1 text-xs">NEXT_PUBLIC_ADMIN_ACCESS_TOKEN</code>。
-          </p>
-        </div>
-      </div>
-    )
-  }
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setLoading(true)
     setError(null)
+    setLoading(true)
 
-    if (token.trim() === adminToken) {
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem('admin-token', token.trim())
+    try {
+      const response = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        setError(result.message || '账号或密码错误')
+        setLoading(false)
+        return
       }
-      router.replace('/admin/prompts')
-    } else {
-      setError('访问令牌不正确，请重试。')
-    }
 
-    setLoading(false)
+      router.replace('/admin/prompts')
+    } catch (error) {
+      console.error('[admin] login request failed', error)
+      setError('登录失败，请稍后再试。')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md rounded-2xl border-2 border-gray-900 bg-white p-8 shadow-lg">
+      <div className="w-full max-w-md rounded-2xl border-2 border-gray-900 bg-white p-8 shadow-xl">
         <h1 className="font-display text-2xl text-gray-900">管理员登录</h1>
-        <p className="mt-2 text-sm text-gray-600">请输入访问令牌，以进入提示词管理后台。</p>
+        <p className="mt-2 text-sm text-gray-600">请输入账号和密码，以进入提示词管理后台。</p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <div>
-            <label className="text-sm font-semibold text-gray-700">访问令牌</label>
+            <label className="text-sm font-semibold text-gray-700">账号</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="请输入 ADMIN_USERNAME"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold text-gray-700">密码</label>
             <input
               type="password"
-              value={token}
-              onChange={(event) => setToken(event.target.value)}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="请输入 ADMIN_ACCESS_TOKEN"
+              placeholder="请输入 ADMIN_PASSWORD"
               required
             />
           </div>
@@ -67,7 +77,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="w-full rounded-md border-2 border-gray-900 bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? '验证中…' : '立即进入'}
+            {loading ? '登录中…' : '立即登录'}
           </button>
         </form>
       </div>

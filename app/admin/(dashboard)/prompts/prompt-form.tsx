@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import type { PromptCategory } from '@/lib/types'
 
 interface PromptFormProps {
@@ -9,7 +8,6 @@ interface PromptFormProps {
 }
 
 export default function PromptForm({ categories }: PromptFormProps) {
-  const router = useRouter()
   const [form, setForm] = useState({
     slug: '',
     title: '',
@@ -20,31 +18,10 @@ export default function PromptForm({ categories }: PromptFormProps) {
     useCase: '',
     difficulty: 'beginner',
     tags: '',
-    featured: false,
-    token: '',
+    featured: false
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  const [authorized, setAuthorized] = useState(false)
-
-  useEffect(() => {
-    const adminToken = process.env.NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
-    if (!adminToken) {
-      router.replace('/admin/login')
-      return
-    }
-
-    if (typeof window === 'undefined') return
-
-    const stored = window.localStorage.getItem('admin-token')
-    if (stored !== adminToken) {
-      router.replace('/admin/login')
-      return
-    }
-
-    setAuthorized(true)
-    setForm((prev) => ({ ...prev, token: stored ?? '' }))
-  }, [router])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = event.target
@@ -101,21 +78,11 @@ export default function PromptForm({ categories }: PromptFormProps) {
     }
   }
 
-  if (!authorized) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-        <p className="text-sm text-gray-600">正在验证管理员访问权限…</p>
-      </div>
-    )
-  }
-
   return (
     <div className="bg-white">
-      <div className="container-custom py-16">
+      <div className="px-6 py-8">
         <h1 className="font-display text-3xl text-gray-900">提示词管理后台</h1>
-        <p className="mt-3 text-sm text-gray-600">
-          填写下列表单，提交后数据将写入 Supabase 数据库。请确保使用真实 slug 并填写访问令牌。
-        </p>
+        <p className="mt-3 text-sm text-gray-600">填写下列表单，提交后数据将写入 Supabase 数据库。</p>
 
         <form onSubmit={handleSubmit} className="mt-10 space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
@@ -244,19 +211,6 @@ export default function PromptForm({ categories }: PromptFormProps) {
               checked={form.featured}
               onChange={handleChange}
               className="h-4 w-4"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-semibold text-gray-700">访问令牌 *</label>
-            <input
-              type="password"
-              name="token"
-              value={form.token}
-              onChange={handleChange}
-              required
-              className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="请输入 ADMIN_ACCESS_TOKEN"
             />
           </div>
 

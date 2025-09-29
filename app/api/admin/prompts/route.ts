@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase/client'
+import { getAdminSessionCookieName, verifyAdminSessionToken } from '@/lib/auth/admin-session'
 
 const REQUIRED_FIELDS = ['slug', 'title', 'template', 'category', 'difficulty'] as const
 type RequiredField = (typeof REQUIRED_FIELDS)[number]
@@ -9,18 +11,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: 'Service role key not configured' }, { status: 500 })
   }
 
-  const adminToken = process.env.ADMIN_ACCESS_TOKEN
-  if (!adminToken) {
-    return NextResponse.json({ success: false, message: 'ADMIN_ACCESS_TOKEN not configured' }, { status: 500 })
-  }
-
   try {
-    const body = await request.json()
-    const token = body.token || request.headers.get('authorization')?.replace('Bearer ', '')
+    const sessionCookie = cookies().get(getAdminSessionCookieName())?.value
+    const session = await verifyAdminSessionToken(sessionCookie)
 
-    if (!token || token !== adminToken) {
+    if (!session) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
     }
+
+    const body = await request.json()
 
     const missingField = REQUIRED_FIELDS.find((field) => !body[field]) as RequiredField | undefined
     if (missingField) {
