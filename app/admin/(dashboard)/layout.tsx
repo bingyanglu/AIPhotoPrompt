@@ -2,13 +2,14 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getAdminSessionCookieName, verifyAdminSessionToken } from '@/lib/auth/admin-session'
+import { getAdminSessionCookieName, verifyAdminSessionToken, type AdminSessionPayload } from '@/lib/auth/admin-session'
 import AdminSidebar from './sidebar'
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies()
   const sessionCookie = cookieStore.get(getAdminSessionCookieName())?.value
   const session = await verifyAdminSessionToken(sessionCookie)
+  const username = (session as AdminSessionPayload | null)?.username ?? 'Admin'
 
   if (!session) {
     redirect('/admin/login')
@@ -22,7 +23,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
             <div>
               <h1 className="font-display text-2xl text-gray-900">AI Photo Prompt Lab Admin</h1>
-              <p className="text-sm text-gray-600">Welcome back, {session?.username ?? 'Admin'}</p>
+              <p className="text-sm text-gray-600">Welcome back, {username}</p>
             </div>
             <Link
               href="/admin/logout"

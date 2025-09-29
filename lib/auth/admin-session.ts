@@ -21,12 +21,12 @@ export async function createAdminSessionCookie(username: string) {
   return { token, maxAge: TOKEN_EXPIRES_SECONDS }
 }
 
-export async function verifyAdminSessionToken(token: string | undefined) {
+export async function verifyAdminSessionToken(token: string | undefined): Promise<AdminSessionPayload | null> {
   if (!token) return null
 
   try {
     const { payload } = await jwtVerify(token, getSecretKey())
-    return payload
+    return payload as AdminSessionPayload
   } catch (error) {
     console.warn('[admin] session verify failed', error)
     return null
