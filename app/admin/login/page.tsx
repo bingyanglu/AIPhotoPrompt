@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
       const result = await response.json()
 
       if (!response.ok || !result.success) {
-        setError(result.message || '账号或密码错误')
+        setError(result.message || 'Invalid username or password')
         setLoading(false)
         return
       }
@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
       router.replace('/admin/prompts')
     } catch (error) {
       console.error('[admin] login request failed', error)
-      setError('登录失败，请稍后再试。')
+      setError('Login failed. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -42,30 +42,30 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md rounded-2xl border-2 border-gray-900 bg-white p-8 shadow-xl">
-        <h1 className="font-display text-2xl text-gray-900">管理员登录</h1>
-        <p className="mt-2 text-sm text-gray-600">请输入账号和密码，以进入提示词管理后台。</p>
+        <h1 className="font-display text-2xl text-gray-900">Admin Login</h1>
+        <p className="mt-2 text-sm text-gray-600">Enter your credentials to manage prompts.</p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <div>
-            <label className="text-sm font-semibold text-gray-700">账号</label>
+            <label className="text-sm font-semibold text-gray-700">Username</label>
             <input
               type="text"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="请输入 ADMIN_USERNAME"
+              placeholder="Enter ADMIN_USERNAME"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-gray-700">密码</label>
+            <label className="text-sm font-semibold text-gray-700">Password</label>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="请输入 ADMIN_PASSWORD"
+              placeholder="Enter ADMIN_PASSWORD"
               required
             />
           </div>
@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="w-full rounded-md border-2 border-gray-900 bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? '登录中…' : '立即登录'}
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
       </div>

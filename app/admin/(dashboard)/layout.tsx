@@ -22,13 +22,13 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
             <div>
               <h1 className="font-display text-2xl text-gray-900">AI Photo Prompt Lab Admin</h1>
-              <p className="text-sm text-gray-600">欢迎回来，{session?.username ?? '管理员'}</p>
+              <p className="text-sm text-gray-600">Welcome back, {session?.username ?? 'Admin'}</p>
             </div>
             <Link
               href="/admin/logout"
               className="rounded-md border-2 border-gray-900 px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
             >
-              退出登录
+              Sign out
             </Link>
           </header>
           <main className="flex-1 overflow-y-auto bg-gray-50">{children}</main>

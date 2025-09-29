@@ -14,11 +14,11 @@ export default async function PromptsPage() {
     getPrompts()
   ])
 
-  // 为每个分类创建子分类（基于 useCase）
+  // Build sub-categories for each category (based on useCase)
   const categoriesWithSubcategories: PromptCategorySummary[] = categories.map((category) => {
     const categoryPrompts = prompts.filter((prompt) => prompt.category === category.slug)
 
-    // 提取该分类下的所有 useCase 作为子分类
+    // Grab all useCases under the category as sub-categories
     const subcategories = [...new Set(categoryPrompts.map((prompt) => prompt.useCase))].filter(Boolean)
 
     return {

@@ -72,7 +72,7 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
 }
 
 /**
- * 博客文章网格容器
+ * Blog post grid container
  */
 export function BlogGrid({ 
   posts, 
@@ -115,7 +115,7 @@ export function BlogGrid({
 }
 
 /**
- * 紧凑版博客卡片，用于列表视图
+ * Compact blog card for list views
  */
 export function CompactBlogCard({ post }: { post: BlogPost }) {
   return (

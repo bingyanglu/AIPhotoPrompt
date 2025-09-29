@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { SEOMetadata, PageMetadata } from './types'
 
 // ========================================
-// 默认 SEO 配置
+// Default SEO configuration
 // ========================================
 
 export const DEFAULT_SEO: SEOMetadata = {
@@ -27,11 +27,11 @@ export const SITE_CONFIG = {
 }
 
 // ========================================
-// SEO 工具函数
+// SEO utility functions
 // ========================================
 
 /**
- * 生成页面的完整 SEO 元数据
+ * Generate full SEO metadata for a page
  */
 export function generateSEOMetadata(
   pageData: Partial<SEOMetadata> & { 
@@ -89,7 +89,7 @@ export function generateSEOMetadata(
       images: ogImage ? [ogImage] : [],
     },
     
-    // 额外的 meta 标签
+    // Additional meta tags
     other: {
       ...(pageData.author && { 'article:author': pageData.author }),
       'article:publisher': SITE_CONFIG.name,
@@ -97,7 +97,7 @@ export function generateSEOMetadata(
       ...(pageData.lastModified && { 'article:modified_time': pageData.lastModified }),
     },
     
-    // 规范 URL
+    // Canonical URL
     alternates: {
       canonical: canonicalUrl,
     },
@@ -118,7 +118,7 @@ export function generateSEOMetadata(
 }
 
 /**
- * 为博客文章生成 SEO 元数据
+ * Generate SEO metadata for blog posts
  */
 export function generateBlogSEO(post: {
   title: string
@@ -142,7 +142,7 @@ export function generateBlogSEO(post: {
 }
 
 /**
- * 为提示词页面生成 SEO 元数据
+ * Generate SEO metadata for prompt pages
  */
 export function generatePromptSEO(prompt: {
   title: string
@@ -169,7 +169,7 @@ export function generatePromptSEO(prompt: {
 }
 
 /**
- * 生成结构化数据 (JSON-LD)
+ * Generate structured data (JSON-LD)
  */
 export function generateStructuredData(type: 'website' | 'article' | 'organization', data: any) {
   const baseSchema = {
@@ -239,7 +239,7 @@ export function generateStructuredData(type: 'website' | 'article' | 'organizati
 }
 
 /**
- * 生成面包屑导航结构化数据
+ * Generate breadcrumb structured data
  */
 export function generateBreadcrumbSchema(breadcrumbs: Array<{ name: string; url: string }>) {
   return {
@@ -255,7 +255,7 @@ export function generateBreadcrumbSchema(breadcrumbs: Array<{ name: string; url:
 }
 
 /**
- * 验证 SEO 数据完整性
+ * Validate SEO data integrity
  */
 export function validateSEOData(data: Partial<SEOMetadata>): {
   isValid: boolean
@@ -265,11 +265,11 @@ export function validateSEOData(data: Partial<SEOMetadata>): {
   const warnings: string[] = []
   const errors: string[] = []
 
-  // 必需字段检查
+  // Required field checks
   if (!data.title) errors.push('Title is required')
   if (!data.description) errors.push('Description is required')
 
-  // 长度检查
+  // Length checks
   if (data.title && data.title.length > 60) {
     warnings.push('Title is longer than 60 characters')
   }
@@ -280,7 +280,7 @@ export function validateSEOData(data: Partial<SEOMetadata>): {
     warnings.push('Title might be too short (less than 30 characters)')
   }
 
-  // 关键词检查
+  // Keyword checks
   if (data.keywords && Array.isArray(data.keywords) && data.keywords.length === 0) {
     warnings.push('No keywords specified')
   }
@@ -293,7 +293,7 @@ export function validateSEOData(data: Partial<SEOMetadata>): {
 }
 
 /**
- * 为站点地图生成 URL 列表
+ * Generate URL list for sitemap
  */
 export async function generateSitemapUrls(): Promise<Array<{
   url: string

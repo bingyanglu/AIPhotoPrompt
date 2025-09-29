@@ -20,7 +20,7 @@ import {
 import { getSupabaseClient, isSupabaseConfigured } from './supabase/client'
 
 // ========================================
-// 路径配置
+// Path configuration
 // ========================================
 
 const CONTENT_DIR = path.join(process.cwd(), 'content')
@@ -30,7 +30,7 @@ const PROMPTS_CONFIG_PATH = path.join(PROMPTS_DIR, 'config', 'prompts-meta.json'
 const RESOURCES_DIR = path.join(CONTENT_DIR, 'resources')
 
 // ========================================
-// JSON 配置读取工具
+// JSON config helpers
 // ========================================
 
 async function readJSONConfig<T>(filePath: string): Promise<T> {
@@ -51,7 +51,7 @@ async function readJSONConfig<T>(filePath: string): Promise<T> {
 }
 
 // ========================================
-// 博客内容管理
+// Blog content management
 // ========================================
 
 export async function getBlogConfig(): Promise<BlogConfig> {
@@ -65,7 +65,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     return config.posts.sort((a, b) => {
       const dateA = new Date(a.publishDate || '')
       const dateB = new Date(b.publishDate || '')
-      return dateB.getTime() - dateA.getTime() // 最新的在前
+      return dateB.getTime() - dateA.getTime() // latest first
     })
   } catch (error) {
     console.error('Error getting blog posts:', error)
@@ -82,12 +82,12 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       return null
     }
     
-    // 读取 Markdown 内容
+    // Read Markdown content
     const postPath = path.join(BLOG_DIR, 'posts', `${slug}.md`)
     
     if (!fs.existsSync(postPath)) {
       console.warn(`Markdown file not found for post: ${slug}`)
-      return postMeta // 返回元数据，没有内容
+      return postMeta // return metadata when no content is found
     }
     
     const { frontmatter, htmlContent, rawContent } = await parseMarkdownFile(postPath)
@@ -111,7 +111,7 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
 }
 
 // ========================================
-// 提示词内容管理
+// Prompt content management
 // ========================================
 
 async function getPromptCategoriesFromSupabase(): Promise<PromptCategory[]> {
@@ -311,7 +311,7 @@ export async function getPromptConfig(): Promise<PromptConfig> {
 }
 
 // ========================================
-// 资源内容管理
+// Resource content management
 // ========================================
 
 export async function getResourceConfig(): Promise<ResourceConfig> {
@@ -334,7 +334,7 @@ export async function getResources(): Promise<Resource[]> {
 }
 
 // ========================================
-// 通用内容查询
+// Generic content query
 // ========================================
 
 export async function queryContent(query: ContentQuery): Promise<any[]> {
@@ -355,7 +355,7 @@ export async function queryContent(query: ContentQuery): Promise<any[]> {
         return []
     }
     
-    // 应用过滤器
+    // Apply filters
     if (query.category) {
       content = content.filter(item => item.category === query.category)
     }
@@ -370,7 +370,7 @@ export async function queryContent(query: ContentQuery): Promise<any[]> {
       content = content.filter(item => item.featured === query.featured)
     }
     
-    // 排序
+    // Sorting
     if (query.sortBy) {
       content.sort((a, b) => {
         const aValue = a[query.sortBy!]
@@ -383,7 +383,7 @@ export async function queryContent(query: ContentQuery): Promise<any[]> {
       })
     }
     
-    // 分页
+    // Pagination
     if (query.offset !== undefined || query.limit !== undefined) {
       const offset = query.offset || 0
       const limit = query.limit || 10
@@ -398,14 +398,14 @@ export async function queryContent(query: ContentQuery): Promise<any[]> {
 }
 
 // ========================================
-// 搜索功能
+// Search functionality
 // ========================================
 
 export async function searchContent(searchQuery: string): Promise<SearchResult<any>> {
   const startTime = Date.now()
   
   try {
-    // 获取所有内容
+    // Fetch all content
     const [blogs, prompts, resources] = await Promise.all([
       getBlogPosts(),
       getPrompts(),
@@ -418,7 +418,7 @@ export async function searchContent(searchQuery: string): Promise<SearchResult<a
       ...resources.map(item => ({ ...item, type: 'resource' }))
     ]
     
-    // 简单的文本搜索
+    // Simple text search
     const searchTerms = searchQuery.toLowerCase().split(' ')
     const results = allContent.filter(item => {
       const searchText = `${item.title} ${item.description} ${item.tags?.join(' ') || ''}`.toLowerCase()
@@ -445,11 +445,11 @@ export async function searchContent(searchQuery: string): Promise<SearchResult<a
 }
 
 // ========================================
-// 缓存工具 (简单的内存缓存)
+// Cache helpers (simple in-memory cache)
 // ========================================
 
 const cache = new Map<string, { data: any; timestamp: number }>()
-const CACHE_TTL = 5 * 60 * 1000 // 5 分钟
+const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
 function getCacheKey(...parts: string[]): string {
   return parts.join(':')
@@ -473,23 +473,23 @@ export function setCachedData<T>(key: string, data: T): void {
 }
 
 // ========================================
-// 站点地图生成
+// Sitemap generation
 // ========================================
 
 export async function generateSitemap(): Promise<string[]> {
   try {
     const urls: string[] = []
     
-    // 静态页面
+    // Static pages
     urls.push('/', '/prompts', '/blog', '/legal/privacy-policy', '/legal/terms-of-service')
     
-    // 博客文章
+    // Blog posts
     const posts = await getBlogPosts()
     posts.forEach(post => {
       urls.push(`/blog/${post.slug}`)
     })
     
-    // 提示词分类和详情
+    // Prompt categories and details
     const categories = await getPromptCategories()
     categories.forEach(category => {
       urls.push(`/prompts/${category.slug}`)

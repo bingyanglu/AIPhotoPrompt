@@ -42,7 +42,7 @@ export default function EmailSubscribe({
     }
   }
 
-  // 简化的尺寸配置
+  // Simplified size configuration
   const isLarge = size === 'large'
   const inputClass = isLarge 
     ? 'px-6 py-4 text-lg' 

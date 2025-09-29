@@ -7,22 +7,22 @@ import path from 'path'
 // Import removed to fix build issue
 
 // ========================================
-// Markdown 处理配置
+// Markdown processing configuration
 // ========================================
 
 const processor = remark()
   .use(remarkGfm) // GitHub Flavored Markdown support
   .use(remarkHtml, { 
-    sanitize: false, // 允许 HTML 标签，用于更丰富的内容
+    sanitize: false, // allow HTML tags for richer content
     allowDangerousHtml: true 
   })
 
 // ========================================
-// 文件系统工具函数
+// File system helpers
 // ========================================
 
 /**
- * 检查文件是否存在
+ * Check whether a file exists
  */
 export function fileExists(filePath: string): boolean {
   try {
@@ -33,7 +33,7 @@ export function fileExists(filePath: string): boolean {
 }
 
 /**
- * 获取目录下所有 Markdown 文件
+ * Get all Markdown files in a directory
  */
 export function getMarkdownFiles(dirPath: string): string[] {
   try {
@@ -51,18 +51,18 @@ export function getMarkdownFiles(dirPath: string): string[] {
 }
 
 /**
- * 从文件名获取 slug
+ * Derive slug from filename
  */
 export function getSlugFromFilename(filename: string): string {
   return path.basename(filename, path.extname(filename))
 }
 
 // ========================================
-// Markdown 解析核心函数
+// Markdown parsing core functions
 // ========================================
 
 /**
- * 解析 Markdown 文件的 frontmatter 和内容
+ * Parse frontmatter and content from Markdown file
  */
 export async function parseMarkdownFile<T = Record<string, any>>(
   filePath: string
@@ -74,22 +74,22 @@ export async function parseMarkdownFile<T = Record<string, any>>(
   slug: string
 }> {
   try {
-    // 检查文件是否存在
+    // check if file exists
     if (!fileExists(filePath)) {
       throw new Error(`File not found: ${filePath}`)
     }
 
-    // 读取文件内容
+    // read file content
     const fileContent = fs.readFileSync(filePath, 'utf8')
     
-    // 解析 frontmatter
+    // parse frontmatter
     const { data: frontmatter, content: rawContent } = matter(fileContent)
     
-    // 将 Markdown 转换为 HTML
+    // convert Markdown to HTML
     const processedContent = await processor.process(rawContent)
     const htmlContent = processedContent.toString()
     
-    // 获取 slug
+    // derive slug
     const slug = frontmatter.slug || getSlugFromFilename(filePath)
     
     return {
@@ -109,7 +109,7 @@ export async function parseMarkdownFile<T = Record<string, any>>(
 }
 
 /**
- * 批量解析目录下的所有 Markdown 文件
+ * Parse every Markdown file under a directory
  */
 export async function parseMarkdownDirectory<T = Record<string, any>>(
   dirPath: string
@@ -134,7 +134,7 @@ export async function parseMarkdownDirectory<T = Record<string, any>>(
         })
       } catch (error) {
         console.error(`Error parsing file ${filePath}:`, error)
-        // 继续处理其他文件，不因单个文件错误而终止
+        // Continue processing remaining files even if one fails
         continue
       }
     }
@@ -146,25 +146,25 @@ export async function parseMarkdownDirectory<T = Record<string, any>>(
 }
 
 // ========================================
-// 内容处理工具函数
+// Content processing utilities
 // ========================================
 
 /**
- * 提取内容摘要
+ * Extract content excerpt
  */
 export function extractExcerpt(content: string, maxLength: number = 160): string {
-  // 移除 Markdown 语法
+  // Remove Markdown syntax
   const plainText = content
-    .replace(/#{1,6}\s+/g, '') // 移除标题标记
-    .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗体标记
-    .replace(/\*(.*?)\*/g, '$1') // 移除斜体标记
-    .replace(/`(.*?)`/g, '$1') // 移除代码标记
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 移除链接，保留文本
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // 移除图片
-    .replace(/\n+/g, ' ') // 替换换行为空格
+    .replace(/#{1,6}\s+/g, '') // remove heading markers
+    .replace(/\*\*(.*?)\*\*/g, '$1') // remove bold markers
+    .replace(/\*(.*?)\*/g, '$1') // remove italic markers
+    .replace(/`(.*?)`/g, '$1') // remove code markers
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // remove links keep text
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // remove images
+    .replace(/\n+/g, ' ') // replace line breaks with spaces
     .trim()
   
-  // 截取指定长度
+  // Trim to desired length
   if (plainText.length <= maxLength) {
     return plainText
   }
@@ -178,7 +178,7 @@ export function extractExcerpt(content: string, maxLength: number = 160): string
 }
 
 /**
- * 计算阅读时间（基于平均阅读速度 200 词/分钟）
+ * Calculate reading time (based on 200 words/minute)
  */
 export function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200
@@ -189,7 +189,7 @@ export function calculateReadingTime(content: string): string {
 }
 
 /**
- * 从内容中提取标题列表（用于目录生成）
+ * Extract headings from content (for TOC)
  */
 export function extractHeadings(content: string): Array<{
   level: number
@@ -215,7 +215,7 @@ export function extractHeadings(content: string): Array<{
 }
 
 /**
- * 验证 frontmatter 必需字段
+ * Validate required frontmatter fields
  */
 export function validateFrontmatter<T>(
   frontmatter: any,
@@ -231,7 +231,7 @@ export function validateFrontmatter<T>(
 }
 
 /**
- * 格式化日期
+ * Format date
  */
 export function formatDate(dateString: string): string {
   try {
@@ -247,7 +247,7 @@ export function formatDate(dateString: string): string {
 }
 
 /**
- * 生成内容的元数据
+ * Generate metadata for content
  */
 export function generateContentMetadata(
   frontmatter: any,

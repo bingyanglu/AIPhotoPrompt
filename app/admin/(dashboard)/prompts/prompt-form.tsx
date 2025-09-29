@@ -54,11 +54,11 @@ export default function PromptForm({ categories }: PromptFormProps) {
 
       const result = await response.json()
       if (!response.ok || !result.success) {
-        setMessage(result.message || '提交失败，请检查数据。')
+        setMessage(result.message || 'Submission failed. Please review your input.')
         return
       }
 
-      setMessage('提示词保存成功！')
+      setMessage('Prompt saved successfully!')
       setForm((prev) => ({
         ...prev,
         slug: '',
@@ -72,7 +72,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
       }))
     } catch (error) {
       console.error('Failed to create prompt', error)
-      setMessage('提交过程中出现错误，请稍后再试。')
+      setMessage('An error occurred while saving. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -81,8 +81,8 @@ export default function PromptForm({ categories }: PromptFormProps) {
   return (
     <div className="bg-white">
       <div className="px-6 py-8">
-        <h1 className="font-display text-3xl text-gray-900">提示词管理后台</h1>
-        <p className="mt-3 text-sm text-gray-600">填写下列表单，提交后数据将写入 Supabase 数据库。</p>
+        <h1 className="font-display text-3xl text-gray-900">Prompt Library Admin</h1>
+        <p className="mt-3 text-sm text-gray-600">Fill in the form below to save prompts to Supabase.</p>
 
         <form onSubmit={handleSubmit} className="mt-10 space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
@@ -95,7 +95,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
                 onChange={handleChange}
                 required
                 className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                placeholder="例如 gemini-new-prompt"
+                placeholder="e.g. gemini-new-prompt"
               />
             </div>
             <div>
@@ -119,7 +119,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
               onChange={handleChange}
               rows={3}
               className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="简短描述提示词用途"
+              placeholder="Short description"
             />
           </div>
 
@@ -137,7 +137,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div>
-              <label className="text-sm font-semibold text-gray-700">封面图 URL</label>
+              <label className="text-sm font-semibold text-gray-700">Cover image URL</label>
               <input
                 type="text"
                 name="coverImage"
@@ -155,14 +155,14 @@ export default function PromptForm({ categories }: PromptFormProps) {
                 value={form.useCase}
                 onChange={handleChange}
                 className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                placeholder="例如 Retail Flatlay Prompts"
+                placeholder="e.g. Retail Flatlay Prompts"
               />
             </div>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             <div>
-              <label className="text-sm font-semibold text-gray-700">所属分类 *</label>
+              <label className="text-sm font-semibold text-gray-700">Category *</label>
               <select
                 name="category"
                 value={form.category}
@@ -178,7 +178,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
               </select>
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700">难度 *</label>
+              <label className="text-sm font-semibold text-gray-700">Difficulty *</label>
               <select
                 name="difficulty"
                 value={form.difficulty}
@@ -191,14 +191,14 @@ export default function PromptForm({ categories }: PromptFormProps) {
               </select>
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700">标签（逗号分隔）</label>
+              <label className="text-sm font-semibold text-gray-700">Tags (comma separated)</label>
               <input
                 type="text"
                 name="tags"
                 value={form.tags}
                 onChange={handleChange}
                 className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                placeholder="例如 gemini, figurine, product"
+                placeholder="e.g. gemini, figurine, product"
               />
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function PromptForm({ categories }: PromptFormProps) {
               disabled={loading}
               className="inline-flex items-center justify-center rounded-md border-2 border-gray-900 bg-gray-900 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? '提交中…' : '保存提示词'}
+              {loading ? 'Saving…' : 'Save prompt'}
             </button>
           </div>
         </form>

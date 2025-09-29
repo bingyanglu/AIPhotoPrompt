@@ -7,14 +7,14 @@ export async function POST(request: Request) {
   const passwordEnv = process.env.ADMIN_PASSWORD
 
   if (!usernameEnv || !passwordEnv) {
-    return NextResponse.json({ success: false, message: '管理员账号未配置' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Admin credentials are not configured' }, { status: 500 })
   }
 
   try {
     const { username, password } = await request.json()
 
     if (username !== usernameEnv || password !== passwordEnv) {
-      return NextResponse.json({ success: false, message: '账号或密码错误' }, { status: 401 })
+      return NextResponse.json({ success: false, message: 'Invalid username or password' }, { status: 401 })
     }
 
     const cookieStore = cookies()
@@ -30,6 +30,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('[admin] login error', error)
-    return NextResponse.json({ success: false, message: '登录失败' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Login failed' }, { status: 500 })
   }
 }

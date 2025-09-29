@@ -1,5 +1,5 @@
 // ========================================
-// 基础类型定义
+// Base type definitions
 // ========================================
 
 export interface BaseContent {
@@ -15,7 +15,7 @@ export interface BaseContent {
 }
 
 // ========================================
-// 博客相关类型
+// Blog related types
 // ========================================
 
 export interface BlogPost extends BaseContent {
@@ -40,7 +40,7 @@ export interface BlogConfig {
 }
 
 // ========================================
-// 提示词相关类型
+// Prompt related types
 // ========================================
 
 export interface PromptExample {
@@ -80,7 +80,7 @@ export interface PromptConfig {
 }
 
 // ========================================
-// 资源相关类型
+// Resource related types
 // ========================================
 
 export interface Resource extends BaseContent {
@@ -106,7 +106,7 @@ export interface ResourceConfig {
 }
 
 // ========================================
-// SEO 和元数据类型
+// SEO and metadata types
 // ========================================
 
 export interface SEOMetadata {
@@ -127,7 +127,7 @@ export interface PageMetadata extends SEOMetadata {
 }
 
 // ========================================
-// 导航和菜单类型
+// Navigation and menu types
 // ========================================
 
 export interface NavItem {
@@ -150,7 +150,7 @@ export interface FooterSection {
 }
 
 // ========================================
-// 内容管理系统类型
+// Content management system types
 // ========================================
 
 export interface ContentConfig {
@@ -177,7 +177,7 @@ export interface SiteConfig {
 }
 
 // ========================================
-// API 响应类型
+// API response types
 // ========================================
 
 export interface PaginatedResponse<T> {
@@ -200,7 +200,7 @@ export interface SearchResult<T> {
 }
 
 // ========================================
-// 表单和用户交互类型
+// Form and user interaction types
 // ========================================
 
 export interface NewsletterSubscription {
@@ -217,7 +217,7 @@ export interface ContactForm {
 }
 
 // ========================================
-// 错误处理类型
+// Error handling types
 // ========================================
 
 export interface APIError {
@@ -232,7 +232,7 @@ export interface ContentError extends Error {
 }
 
 // ========================================
-// 工具函数类型
+// Utility function types
 // ========================================
 
 export type ContentType = 'blog' | 'prompt' | 'resource'

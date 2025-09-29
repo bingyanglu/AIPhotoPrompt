@@ -4,10 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { href: '/admin/prompts', label: '提示词管理', disabled: false },
-  { href: '/admin/categories', label: '分类管理', disabled: true },
-  { href: '/admin/blog', label: '博客文章', disabled: true },
-  { href: '/admin/settings', label: '系统设置', disabled: true }
+  { href: '/admin/prompts', label: 'Prompt Library', disabled: false },
+  { href: '/admin/categories', label: 'Categories', disabled: true },
+  { href: '/admin/blog', label: 'Blog Posts', disabled: true },
+  { href: '/admin/settings', label: 'Settings', disabled: true }
 ]
 
 export default function AdminSidebar() {
@@ -16,7 +16,7 @@ export default function AdminSidebar() {
   return (
     <aside className="hidden w-64 flex-shrink-0 border-r border-gray-200 bg-white md:flex md:flex-col">
       <div className="px-6 py-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">管理菜单</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">Admin Menu</p>
       </div>
       <nav className="flex-1 space-y-1 px-4 pb-6">
         {NAV_ITEMS.map((item) => {
@@ -27,7 +27,7 @@ export default function AdminSidebar() {
                 className="rounded-lg border border-dashed border-gray-200 px-4 py-3 text-sm text-gray-400"
               >
                 {item.label}
-                <span className="ml-2 text-xs">(敬请期待)</span>
+                <span className="ml-2 text-xs">(coming soon)</span>
               </div>
             )
           }

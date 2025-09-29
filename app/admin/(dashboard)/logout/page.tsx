@@ -22,7 +22,7 @@ export default function AdminLogoutPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <p className="text-sm text-gray-600">正在退出登录…</p>
+      <p className="text-sm text-gray-600">Signing out…</p>
     </div>
   )
 }
