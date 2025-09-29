@@ -1,6 +1,26 @@
 {
   "posts": [
     {
+      "slug": "pokemon-style-photos-gemini-prompts",
+      "title": "Pokémon-Style Photos – Google Gemini AI Photo Prompts Series",
+      "description": "Four editorial Gemini prompts that pair realistic portraits with Pikachu, Charizard, Gengar, and Gyarados looks.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-10-01",
+      "tags": [
+        "gemini-ai",
+        "pokemon",
+        "photo-prompts",
+        "editorial"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/09/a05367db1026e8734e7a2295dc031b1a.png",
+      "category": "insights",
+      "featured": false,
+      "readTime": "6 min read",
+      "excerpt": "Blend high-fashion portraiture with Pokémon-inspired companions using this four-look Gemini AI prompt series.",
+      "seoTitle": "Pokémon-Style Photos – Gemini AI Prompt Series | AI Photo Prompt Lab",
+      "seoDescription": "Create editorial portraits with Pikachu, Charizard, Gengar, and Gyarados using our Gemini AI prompt series."
+    },
+    {
       "slug": "gemini-figurine-photo-prompt",
       "title": "Gemini AI Photo Prompt for Figurines: Turn a Screenshot into a Collectible Scene with Nano Banana",
       "description": "Turn a game screenshot into a Gemini figurine render with Nano Banana and a reusable prompt.",
