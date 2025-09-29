@@ -24,10 +24,13 @@ export default function PromptForm({ categories }: PromptFormProps) {
   const [message, setMessage] = useState<string | null>(null)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = event.target
+    const target = event.target
+    const { name, value } = target
+
+    const shouldUseChecked = target instanceof HTMLInputElement && target.type === 'checkbox'
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: shouldUseChecked ? target.checked : value
     }))
   }
 
