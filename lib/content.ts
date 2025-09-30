@@ -159,7 +159,29 @@ type PromptRow = {
   tags: string[] | null
   featured: boolean | null
   copy_count: number | null
+  created_at: string | null
   prompt_categories: { slug: string }[] | { slug: string } | null
+}
+
+function mapPromptRowToPrompt(row: PromptRow): Prompt {
+  const categorySlug = Array.isArray(row.prompt_categories)
+    ? row.prompt_categories[0]?.slug ?? ''
+    : row.prompt_categories?.slug ?? ''
+
+  return {
+    slug: row.slug,
+    title: row.title,
+    description: row.description ?? '',
+    template: row.template,
+    coverImage: row.cover_image ?? undefined,
+    category: categorySlug,
+    useCase: row.use_case ?? '',
+    difficulty: (row.difficulty ?? 'beginner') as Prompt['difficulty'],
+    tags: row.tags ?? [],
+    featured: row.featured ?? false,
+    copyCount: row.copy_count ?? 0,
+    createdAt: row.created_at ?? undefined
+  }
 }
 
 async function getPromptsFromSupabase(): Promise<Prompt[]> {
@@ -177,6 +199,7 @@ async function getPromptsFromSupabase(): Promise<Prompt[]> {
       tags,
       featured,
       copy_count,
+      created_at,
       prompt_categories:prompt_categories!inner ( slug )
     `)
     .order('featured', { ascending: false })
@@ -189,21 +212,7 @@ async function getPromptsFromSupabase(): Promise<Prompt[]> {
 
   const rows = (data ?? []) as PromptRow[]
 
-  return rows.map((prompt) => ({
-    slug: prompt.slug,
-    title: prompt.title,
-    description: prompt.description ?? '',
-    template: prompt.template,
-    coverImage: prompt.cover_image ?? undefined,
-    category: Array.isArray(prompt.prompt_categories)
-      ? prompt.prompt_categories[0]?.slug ?? ''
-      : prompt.prompt_categories?.slug ?? '',
-    useCase: prompt.use_case ?? '',
-    difficulty: (prompt.difficulty ?? 'beginner') as Prompt['difficulty'],
-    tags: prompt.tags ?? [],
-    featured: prompt.featured ?? false,
-    copyCount: prompt.copy_count ?? 0
-  }))
+  return rows.map(mapPromptRowToPrompt)
 }
 
 export async function getPrompts(): Promise<Prompt[]> {
@@ -241,6 +250,7 @@ export async function getPrompt(slug: string): Promise<Prompt | null> {
         tags,
         featured,
         copy_count,
+        created_at,
         prompt_categories:prompt_categories!inner ( slug )
       `)
       .eq('slug', slug)
@@ -256,23 +266,7 @@ export async function getPrompt(slug: string): Promise<Prompt | null> {
       return null
     }
 
-    const categorySlug = Array.isArray(row.prompt_categories)
-      ? row.prompt_categories[0]?.slug ?? ''
-      : row.prompt_categories?.slug ?? ''
-
-    const promptMeta: Prompt = {
-      slug: row.slug,
-      title: row.title,
-      description: row.description ?? '',
-      template: row.template,
-      coverImage: row.cover_image ?? undefined,
-      category: categorySlug,
-      useCase: row.use_case ?? '',
-      difficulty: (row.difficulty ?? 'beginner') as Prompt['difficulty'],
-      tags: row.tags ?? [],
-      featured: row.featured ?? false,
-      copyCount: row.copy_count ?? 0
-    }
+    const promptMeta = mapPromptRowToPrompt(row)
 
     const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)
     if (fs.existsSync(promptPath)) {
@@ -289,6 +283,46 @@ export async function getPrompt(slug: string): Promise<Prompt | null> {
 export async function getPromptsByCategory(category: string): Promise<Prompt[]> {
   const prompts = await getPrompts()
   return prompts.filter((prompt) => prompt.category === category)
+}
+
+export async function getLatestPrompts(limit = 6): Promise<Prompt[]> {
+  if (!isSupabaseConfigured) {
+    console.warn('Supabase is not configured; returning empty latest prompts list.')
+    return []
+  }
+
+  try {
+    const supabase = getSupabaseClient()
+    const { data, error } = await supabase
+      .from('prompts')
+      .select(`
+        slug,
+        title,
+        description,
+        template,
+        cover_image,
+        use_case,
+        difficulty,
+        tags,
+        featured,
+        copy_count,
+        created_at,
+        prompt_categories:prompt_categories!inner ( slug )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('Supabase error fetching latest prompts:', error)
+      return []
+    }
+
+    const rows = (data ?? []) as PromptRow[]
+    return rows.map(mapPromptRowToPrompt)
+  } catch (error) {
+    console.error('Error getting latest prompts from Supabase:', error)
+    return []
+  }
 }
 
 export async function getPromptConfig(): Promise<PromptConfig> {

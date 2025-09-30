@@ -57,6 +57,7 @@ export interface Prompt extends BaseContent {
   variables?: string[]
   coverImage?: string
   copyCount?: number
+  createdAt?: string
 }
 
 export interface PromptCategory {

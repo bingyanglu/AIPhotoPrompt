@@ -6,7 +6,7 @@ import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
 import PromptShowcase, { type ShowcasePrompt } from '@/components/PromptShowcase'
 import EmailSubscribe from '@/components/EmailSubscribe'
-import { getPrompts } from '@/lib/content'
+import { getLatestPrompts, getPrompts, getBlogPosts } from '@/lib/content'
 import { SITE_CONFIG } from '@/lib/seo'
 
 export const metadata: Metadata = {
@@ -55,25 +55,12 @@ const featuredCategories = [
   }
 ]
 
-const blogHighlights = [
-  {
-    title: '$10K Product Shoots Without a Studio',
-    description: 'Learn how Gemini delivers commercial-grade AI product photography with ready-to-use prompts.',
-    href: '/blog/gemini-product-photography-guide'
-  },
-  {
-    title: 'Gemini Figurine Prompt Workflow',
-    description: 'Transform a screenshot into a collectible figurine scene using our Nano Banana prompt and iteration tips.',
-    href: '/blog/gemini-figurine-photo-prompt'
-  }
-]
-
 export default async function HomePage() {
   const siteDescription = metadata.description ?? 'Explore curated Gemini AI photo prompts and tutorials.'
 
-  const allPrompts = await getPrompts()
-  const featuredPrompts = allPrompts.filter((prompt) => prompt.featured)
-  const selectedPrompts = (featuredPrompts.length > 0 ? featuredPrompts : allPrompts).slice(0, 6)
+  const latestPrompts = await getLatestPrompts(6)
+  const promptPool = latestPrompts.length > 0 ? latestPrompts : await getPrompts()
+  const selectedPrompts = promptPool.slice(0, 6)
   const showcasePrompts: ShowcasePrompt[] = selectedPrompts.map((prompt) => ({
     slug: prompt.slug,
     title: prompt.title,
@@ -83,6 +70,14 @@ export default async function HomePage() {
     category: prompt.category,
     useCase: prompt.useCase,
   }))
+
+  const blogPosts = await getBlogPosts()
+  const latestBlogPosts = blogPosts.slice(0, 3)
+  const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  })
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -128,11 +123,20 @@ export default async function HomePage() {
         <section id="trending-prompts" className="bg-white py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl text-gray-900">This week’s top Gemini AI prompts</h2>
-              <p className="mt-3 text-base text-gray-600">Hand-picked prompts the community is copying right now. Paste, tweak, and render in seconds.</p>
+              <h2 className="font-display text-3xl text-gray-900">Latest Gemini AI Photo Prompts</h2>
+              <p className="mt-3 text-base text-gray-600">Fresh uploads direct from the catalog. Discover what just dropped and take it for a spin instantly.</p>
             </div>
             <div className="mt-12">
               <PromptShowcase prompts={showcasePrompts} />
+            </div>
+            <div className="mt-10 flex justify-center">
+              <Link
+                href="/prompts"
+                className="inline-flex items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-5 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
+              >
+                View more prompts
+                <span aria-hidden>→</span>
+              </Link>
             </div>
           </div>
         </section>
@@ -199,22 +203,43 @@ export default async function HomePage() {
               <p className="mt-3 text-base text-gray-600">Guides to sharpen your Gemini workflow and stay ahead of emerging styles.</p>
             </div>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
-              {blogHighlights.map((post) => (
-                <Link
-                  key={post.href}
-                  href={post.href}
-                  className="group flex h-full flex-col justify-between rounded-lg border-2 border-gray-900 bg-white p-6 text-gray-900 transition-transform duration-200 hover:-translate-y-1"
-                >
-                  <div>
-                    <h3 className="font-display text-xl">{post.title}</h3>
-                    <p className="mt-4 text-sm text-gray-600 leading-relaxed">{post.description}</p>
-                  </div>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900">
-                    Read article
-                    <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
-                  </span>
-                </Link>
-              ))}
+              {latestBlogPosts.map((post) => {
+                const categoryLabel = post.category
+                  ? post.category
+                      .split('-')
+                      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+                      .join(' ')
+                  : 'Blog'
+                const formattedDate = post.publishDate
+                  ? blogDateFormatter.format(new Date(post.publishDate))
+                  : null
+                const metaDetails = [formattedDate, post.readTime].filter(Boolean).join(' · ')
+
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="group flex h-full flex-col justify-between rounded-lg border-2 border-gray-900 bg-white p-6 text-gray-900 transition-transform duration-200 hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+                        {categoryLabel}
+                        {metaDetails && (
+                          <span className="ml-2 normal-case tracking-normal text-gray-400">
+                            {metaDetails}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-3 font-display text-xl">{post.title}</h3>
+                      <p className="mt-4 text-sm text-gray-600 leading-relaxed">{post.description}</p>
+                    </div>
+                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900">
+                      Read article
+                      <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+                    </span>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -230,6 +255,7 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
         <Script id="homepage-website-schema" type="application/ld+json">
           {JSON.stringify(websiteSchema)}
         </Script>

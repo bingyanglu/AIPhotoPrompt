@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import type { Metadata } from 'next'
+import BackToTopButton from '@/components/BackToTopButton'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -77,6 +78,7 @@ export default function RootLayout({
         </Script>
         <div id="root">
           {children}
+          <BackToTopButton />
         </div>
       </body>
     </html>
