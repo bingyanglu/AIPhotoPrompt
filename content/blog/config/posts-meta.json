@@ -1,6 +1,26 @@
 {
   "posts": [
     {
+      "slug": "glassmorphism-prompt-exploration",
+      "title": "One Prompt, Five UI Styles: Glassmorphism to Cyberpunk with Gemini",
+      "description": "Five modular Gemini UI prompts—glassmorphism, hand-drawn, 3D, cute, and cyberpunk—tested on the same onboarding flow.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-10-05",
+      "tags": [
+        "glassmorphism",
+        "ui-design",
+        "ai-prompts",
+        "gemini-ai"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/09/e287afe1414e5b8d569504def78a197d.png",
+      "category": "insights",
+      "featured": false,
+      "readTime": "9 min read",
+      "excerpt": "Explore how swapping style modules—glassmorphism, hand-drawn, 3D, cute, and cyberpunk—reshapes the same onboarding flow.",
+      "seoTitle": "One Prompt, Five UI Styles – Glassmorphism to Cyberpunk with Gemini",
+      "seoDescription": "Dive into five Gemini UI design prompts and see how modular instructions unlock glassmorphism, hand-drawn, 3D, cute, and cyberpunk looks."
+    },
+    {
       "slug": "pokemon-style-photos-gemini-prompts",
       "title": "Pokémon-Style Photos – Google Gemini AI Photo Prompts Series",
       "description": "Four editorial Gemini prompts that pair realistic portraits with Pikachu, Charizard, Gengar, and Gyarados looks.",
