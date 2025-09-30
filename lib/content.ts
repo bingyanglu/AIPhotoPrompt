@@ -501,29 +501,22 @@ export function setCachedData<T>(key: string, data: T): void {
 
 export async function generateSitemap(): Promise<string[]> {
   try {
-    const urls: string[] = []
-    
-    // Static pages
-    urls.push('/', '/prompts', '/blog', '/legal/privacy-policy', '/legal/terms-of-service')
-    
+    const urls = new Set<string>()
+
+    // Static pages that exist in the app router
+    urls.add('/')
+    urls.add('/prompts')
+    urls.add('/blog')
+    urls.add('/legal/privacy-policy')
+    urls.add('/legal/terms-of-service')
+
     // Blog posts
     const posts = await getBlogPosts()
-    posts.forEach(post => {
-      urls.push(`/blog/${post.slug}`)
+    posts.forEach((post) => {
+      urls.add(`/blog/${post.slug}`)
     })
-    
-    // Prompt categories and details
-    const categories = await getPromptCategories()
-    categories.forEach(category => {
-      urls.push(`/prompts/${category.slug}`)
-    })
-    
-    const prompts = await getPrompts()
-    prompts.forEach(prompt => {
-      urls.push(`/prompts/${prompt.category}/${prompt.slug}`)
-    })
-    
-    return urls
+
+    return Array.from(urls)
   } catch (error) {
     console.error('Error generating sitemap:', error)
     return []

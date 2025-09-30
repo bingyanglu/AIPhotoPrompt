@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { PromptCategorySummary } from '@/lib/types'
+import { slugify } from '@/lib/utils'
 
 interface CategoryQuickLinksProps {
   categories: PromptCategorySummary[]
@@ -35,20 +36,15 @@ export default function CategoryQuickLinks({ categories }: CategoryQuickLinksPro
                 {category.subcategories.length > 0 && (
                   <ul className="space-y-1.5 pl-3 text-sm text-gray-600">
                     {category.subcategories.slice(0, 20).map((subcategory) => {
-                      const promptAnchor = category.prompts.find((prompt) => prompt.useCase === subcategory)
-                      const linkTarget = promptAnchor ? `#prompt-${promptAnchor.slug}` : undefined
+                      const groupId = `usecase-${category.slug}-${slugify(subcategory || 'general')}`
                       return (
                         <li key={subcategory} className="leading-snug">
-                          {linkTarget ? (
-                            <Link
-                              href={linkTarget}
-                              className="inline-flex items-center text-gray-600 transition-colors hover:text-gray-900"
-                            >
-                              {subcategory}
-                            </Link>
-                          ) : (
-                            <span>{subcategory}</span>
-                          )}
+                          <Link
+                            href={`#${groupId}`}
+                            className="inline-flex items-center text-gray-600 transition-colors hover:text-gray-900"
+                          >
+                            {subcategory || 'General Prompts'}
+                          </Link>
                         </li>
                       )
                     })}

@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CategoryOverview from '@/components/CategoryOverview'
@@ -7,6 +6,7 @@ import CategoryQuickLinks from '@/components/CategoryQuickLinks'
 import PromptCollection from '@/components/PromptCollection'
 import { getPromptCategories, getPrompts } from '@/lib/content'
 import type { PromptCategorySummary } from '@/lib/types'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export default async function PromptsPage() {
   const [categories, prompts] = await Promise.all([
@@ -19,7 +19,11 @@ export default async function PromptsPage() {
     const categoryPrompts = prompts.filter((prompt) => prompt.category === category.slug)
 
     // Grab all useCases under the category as sub-categories
-    const subcategories = [...new Set(categoryPrompts.map((prompt) => prompt.useCase))].filter(Boolean)
+    const subcategories = [
+      ...new Set(
+        categoryPrompts.map((prompt) => prompt.useCase?.trim() || 'General Prompts')
+      )
+    ]
 
     return {
       ...category,
@@ -112,10 +116,15 @@ export default async function PromptsPage() {
   )
 }
 
-export const metadata: Metadata = {
-  title: 'Gemini Prompts Library - Categories',
-  description: 'Browse our collection of Gemini prompts organized by category. Copy and customize prompts for writing, coding, business, and more.',
-  alternates: {
-    canonical: 'https://www.aiphotoprompt.net/prompts',
-  },
-}
+export const metadata = generateSEOMetadata({
+  title: 'Gemini Prompts Library',
+  description: 'Browse curated Gemini prompts organized by category. Copy and customise templates for photography, marketing, storytelling, and more.',
+  path: '/prompts',
+  keywords: [
+    'Gemini prompts library',
+    'AI photo prompts',
+    'Gemini creative templates',
+    'prompt engineering resources',
+    'AI prompt collection'
+  ]
+})

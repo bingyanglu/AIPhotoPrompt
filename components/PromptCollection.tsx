@@ -1,5 +1,6 @@
-import type { PromptCategorySummary } from '@/lib/types'
+import type { PromptCategorySummary, Prompt } from '@/lib/types'
 import PromptCard from './PromptCard'
+import { slugify } from '@/lib/utils'
 
 interface PromptCollectionProps {
   categories: PromptCategorySummary[]
@@ -35,12 +36,39 @@ export default function PromptCollection({ categories }: PromptCollectionProps) 
           })()}
 
           <div className="space-y-12">
-            {category.prompts.map((prompt) => (
-              <PromptCard key={prompt.slug} prompt={prompt} />
-            ))}
+            {Object.entries(groupPromptsByUseCase(category.prompts)).map(([useCase, prompts]) => {
+              const useCaseId = `usecase-${category.slug}-${slugify(useCase)}`
+
+              return (
+                <section key={useCaseId} id={useCaseId} className="space-y-8 scroll-mt-32">
+                  <header>
+                    <h3 className="font-display text-2xl text-gray-900">{useCase}</h3>
+                    <p className="mt-1 text-sm text-gray-600">
+                      {prompts.length} {prompts.length === 1 ? 'prompt' : 'prompts'}
+                    </p>
+                  </header>
+                  <div className="space-y-12">
+                    {prompts.map((prompt: Prompt) => (
+                      <PromptCard key={prompt.slug} prompt={prompt} />
+                    ))}
+                  </div>
+                </section>
+              )
+            })}
           </div>
         </section>
       ))}
     </div>
   )
+}
+
+function groupPromptsByUseCase(prompts: Prompt[]): Record<string, Prompt[]> {
+  return prompts.reduce((groups, prompt) => {
+    const key = prompt.useCase?.trim() || 'General Prompts'
+    if (!groups[key]) {
+      groups[key] = []
+    }
+    groups[key].push(prompt)
+    return groups
+  }, {} as Record<string, Prompt[]>)
 }
