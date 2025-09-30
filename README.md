@@ -47,26 +47,19 @@ app/                 // Next.js App Router entries
   blog/              // Blog listing + dynamic article route
 components/          // Shared UI (Header, Footer, PromptCard, BlogCard, etc.)
 content/
-  prompts/           // Prompt categories + prompt definitions (JSON + docs)
+  prompts/           // Prompt markdown docs (content lives in Supabase)
   blog/              // Blog metadata (JSON) and markdown articles
 lib/                 // Content loaders, Markdown helpers, shared types
 public/              // Static assets (if any local media is needed)
 ```
 
 ## Editing Prompts
-Prompt data lives in `content/prompts/config/prompts-meta.json`.
-- `categories`: controls prompt sections on `/prompts` and the navigation sidebar.
-- `prompts`: array of prompt entries. Required fields:
-  - `slug`, `title`, `description`
-  - `category`: must match a category `slug`
-  - `difficulty`: `beginner` | `intermediate` | `advanced`
-  - `useCase`: short label shown in category summaries
-  - `template`: the text copied to the clipboard
-  - Optional: `tags`, `coverImage` (remote URL), `featured` (boolean), `copyCount` seed value
+Prompt categories and cards are now managed in Supabase (`prompt_categories`, `prompts`).
+- Update categories via the `prompt_categories` table (slug, title, description, icon, color, order).
+- Add or edit prompt rows in the `prompts` table (slug, title, template, use case, difficulty, etc.).
+- Use the admin interface under `/admin` for a guided form experience, or run SQL migrations when bulk-editing.
 
-Each prompt card displays the configured image at a fixed height (Tailwind utility ensures a max height) and provides an always-visible “Copy prompt” button. Copy counts increment locally and read from `localStorage` using the key `prompt-copy-count:{slug}`.
-
-If you want to attach long-form documentation for a prompt, drop a Markdown file in `content/prompts/docs/{slug}.md`. The loader will merge it when available.
+For long-form reference docs that supplement a prompt, drop a Markdown file in `content/prompts/docs/{slug}.md`. The loader still merges that content when available.
 
 ## Editing Blog Content
 Blog configuration lives in `content/blog/config/posts-meta.json` and references Markdown files stored in `content/blog/posts/`.

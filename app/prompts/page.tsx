@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import CategoryOverview from '@/components/CategoryOverview'
 import CategoryQuickLinks from '@/components/CategoryQuickLinks'
 import PromptCollection from '@/components/PromptCollection'
+import BackToTopButton from '@/components/BackToTopButton'
 import { getPromptCategories, getPrompts } from '@/lib/content'
 import type { PromptCategorySummary } from '@/lib/types'
 import { generateSEOMetadata } from '@/lib/seo'
@@ -110,6 +111,7 @@ export default async function PromptsPage() {
             </div>
           </div>
         </section>
+        <BackToTopButton />
       </main>
       <Footer />
     </div>

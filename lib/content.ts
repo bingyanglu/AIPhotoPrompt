@@ -26,7 +26,6 @@ import { getSupabaseClient, isSupabaseConfigured } from './supabase/client'
 const CONTENT_DIR = path.join(process.cwd(), 'content')
 const BLOG_DIR = path.join(CONTENT_DIR, 'blog')
 const PROMPTS_DIR = path.join(CONTENT_DIR, 'prompts')
-const PROMPTS_CONFIG_PATH = path.join(PROMPTS_DIR, 'config', 'prompts-meta.json')
 const RESOURCES_DIR = path.join(CONTENT_DIR, 'resources')
 
 // ========================================
@@ -137,13 +136,8 @@ async function getPromptCategoriesFromSupabase(): Promise<PromptCategory[]> {
 
 export async function getPromptCategories(): Promise<PromptCategory[]> {
   if (!isSupabaseConfigured) {
-    try {
-      const config = await readJSONConfig<PromptConfig>(PROMPTS_CONFIG_PATH)
-      return config.categories || []
-    } catch (error) {
-      console.error('Error getting prompt categories from JSON:', error)
-      return []
-    }
+    console.warn('Supabase is not configured; returning empty prompt categories list.')
+    return []
   }
 
   try {
@@ -214,17 +208,8 @@ async function getPromptsFromSupabase(): Promise<Prompt[]> {
 
 export async function getPrompts(): Promise<Prompt[]> {
   if (!isSupabaseConfigured) {
-    try {
-      const config = await readJSONConfig<PromptConfig>(PROMPTS_CONFIG_PATH)
-      return config.prompts.sort((a, b) => {
-        if (a.featured && !b.featured) return -1
-        if (!a.featured && b.featured) return 1
-        return a.title.localeCompare(b.title)
-      })
-    } catch (error) {
-      console.error('Error getting prompts from JSON:', error)
-      return []
-    }
+    console.warn('Supabase is not configured; returning empty prompts list.')
+    return []
   }
 
   try {
@@ -237,23 +222,8 @@ export async function getPrompts(): Promise<Prompt[]> {
 
 export async function getPrompt(slug: string): Promise<Prompt | null> {
   if (!isSupabaseConfigured) {
-    try {
-      const prompts = await getPrompts()
-      const promptMeta = prompts.find((prompt) => prompt.slug === slug)
-
-      if (!promptMeta) {
-        return null
-      }
-
-      const promptPath = path.join(PROMPTS_DIR, 'docs', `${slug}.md`)
-      if (fs.existsSync(promptPath)) {
-        await parseMarkdownFile(promptPath)
-      }
-      return promptMeta
-    } catch (error) {
-      console.error(`Error getting prompt ${slug} from JSON:`, error)
-      return null
-    }
+    console.warn(`Supabase is not configured; unable to load prompt: ${slug}`)
+    return null
   }
 
   try {

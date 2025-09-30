@@ -1,15 +1,37 @@
 import Link from 'next/link'
 import type { PromptCategorySummary } from '@/lib/types'
+import { slugify } from '@/lib/utils'
 
 interface CategoryOverviewProps {
   categories: PromptCategorySummary[]
 }
 
 function CategoryCard({ category }: { category: PromptCategorySummary }) {
-  const topPrompts = category.prompts.slice(0, 6)
   const [rawPrefix, rawFocus] = category.title.split(':').map((part) => part.trim())
   const sectionPrefix = rawFocus ? rawPrefix : null
   const sectionTitle = rawFocus || rawPrefix || category.title
+
+  const useCaseCounts = category.prompts.reduce<Record<string, number>>((acc, prompt) => {
+    const key = prompt.useCase?.trim() || 'General Prompts'
+    acc[key] = (acc[key] ?? 0) + 1
+    return acc
+  }, {})
+
+  const seenUseCases = new Set<string>()
+  const useCaseEntries = (category.subcategories.length > 0
+    ? category.subcategories
+    : Object.keys(useCaseCounts)
+  ).reduce<Array<{ label: string; anchorId: string; count: number }>>((acc, rawUseCase) => {
+    const label = rawUseCase?.trim() || 'General Prompts'
+    if (!label || seenUseCases.has(label)) {
+      return acc
+    }
+    seenUseCases.add(label)
+    const anchorId = `usecase-${category.slug}-${slugify(label)}`
+    const count = useCaseCounts[label] ?? 0
+    acc.push({ label, anchorId, count })
+    return acc
+  }, [])
 
   return (
     <div
@@ -26,83 +48,54 @@ function CategoryCard({ category }: { category: PromptCategorySummary }) {
           {sectionTitle}
         </p>
         <p className="mt-2 text-sm text-gray-500">
-          {category.promptCount} curated templates
+          {category.promptCount}
+          <span className="sr-only"> prompts in this category</span>
         </p>
       </div>
 
-      <ul
-        role="list"
-        className="mb-6 max-h-64 space-y-3 overflow-y-auto pr-1"
-      >
-        {topPrompts.length > 0 ? (
-          topPrompts.map((prompt) => (
-            <li
-              key={prompt.slug}
-              className="border-b border-gray-200 pb-2 last:border-b-0"
-            >
+      <ul className="mb-6 max-h-64 space-y-2 overflow-y-auto pr-1 text-left">
+        {useCaseEntries.length > 0 ? (
+          useCaseEntries.map(({ label, anchorId, count }) => (
+            <li key={label} className="leading-snug">
               <Link
-                href={`#prompt-${prompt.slug}`}
-                className="group/item flex items-center gap-3 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
+                href={`#${anchorId}`}
+                className="inline-flex items-baseline gap-2 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
               >
-                <span aria-hidden className="text-gray-400 transition-colors group-hover/item:text-gray-900">
-                  &rarr;
-                </span>
-                <span className="flex-1 leading-tight line-clamp-2">
-                  {prompt.title}
+                <span>•</span>
+                <span>{label}</span>
+                <span className="text-xs text-gray-500">
+                  ({count})
                 </span>
               </Link>
-              <p className="mt-1 text-xs text-gray-500 line-clamp-2">
-                {prompt.description}
-              </p>
             </li>
           ))
         ) : (
-          <li className="rounded-md border border-dashed border-gray-200 px-3 py-6 text-center text-sm text-gray-500">
-            New templates coming soon.
+          <li className="list-none rounded-md border border-dashed border-gray-200 px-3 py-6 text-center text-sm text-gray-500">
+            Use cases coming soon.
           </li>
         )}
       </ul>
 
-      <div className="mt-auto space-y-4">
-        {category.subcategories.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {category.subcategories.slice(0, 5).map((subcategory) => (
-              <span
-                key={subcategory}
-                className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600"
-              >
-                {subcategory}
-              </span>
-            ))}
-            {category.subcategories.length > 5 && (
-              <span className="inline-flex items-center rounded-full border border-dashed border-gray-200 px-3 py-1 text-xs text-gray-500">
-                +{category.subcategories.length - 5} more
-              </span>
-            )}
-          </div>
-        )}
-
-        <Link
-          href={`#category-prompts-${category.slug}`}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
+      <Link
+        href={`#category-prompts-${category.slug}`}
+        className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
+      >
+        Browse all prompts
+        <svg
+          className="h-3.5 w-3.5"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          Browse all prompts
-          <svg
-            className="h-3.5 w-3.5"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3.333 8h8.334M8 3.333 12.667 8 8 12.667"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Link>
-      </div>
+          <path
+            d="M3.333 8h8.334M8 3.333 12.667 8 8 12.667"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Link>
     </div>
   )
 }
