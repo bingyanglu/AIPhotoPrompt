@@ -1,6 +1,6 @@
 ---
 slug: glassmorphism-prompt-exploration
-title: One Prompt, Five UI Styles: Glassmorphism to Cyberpunk with Gemini
+title: One Prompt, Five UI Styles - Glassmorphism to Cyberpunk with Gemini
 author: AI Photo Prompt Lab Team
 publishDate: '2025-10-05'
 tags:
