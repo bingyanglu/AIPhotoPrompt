@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server'
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase/client'
 
-const ALLOWED_SLOTS = new Map([
-  [1, 'used_once'],
-  [2, 'used_twice'],
-  [3, 'used_thrice'],
-  [4, 'used_fourth']
-] as const)
+const SLOT_MAP = {
+  1: 'used_once',
+  2: 'used_twice',
+  3: 'used_thrice',
+  4: 'used_fourth'
+} as const
 
-type SlotKey = (typeof ALLOWED_SLOTS)[number]
+type SlotIndex = keyof typeof SLOT_MAP
+type SlotColumn = (typeof SLOT_MAP)[SlotIndex]
 
 export async function POST(request: Request) {
   if (!isSupabaseServiceConfigured) {
@@ -17,8 +18,8 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => ({}))
   const inviteCode = typeof body?.inviteCode === 'string' ? body.inviteCode.trim().toUpperCase() : ''
-  const slot = Number(body?.slot)
-  const column = ALLOWED_SLOTS.get(slot)
+  const slot = Number(body?.slot) as SlotIndex
+  const column = SLOT_MAP[slot]
 
   if (!inviteCode || !column) {
     return NextResponse.json({ success: false, reason: 'invalid payload' }, { status: 400 })
@@ -38,11 +39,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false }, { status: 500 })
     }
 
-    if (!data) {
+    type InviteUsageRow = Partial<Record<SlotColumn, boolean>>
+    const row = (data ?? null) as InviteUsageRow | null
+
+    if (!row) {
       return NextResponse.json({ success: false, reason: 'invite code not found' }, { status: 404 })
     }
 
-    if (data[column as SlotKey]) {
+    if (row[column]) {
       return NextResponse.json({ success: false, reason: 'already used' }, { status: 409 })
     }
 
