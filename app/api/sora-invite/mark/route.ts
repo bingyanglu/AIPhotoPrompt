@@ -28,36 +28,30 @@ export async function POST(request: Request) {
   try {
     const supabase = getSupabaseServiceClient()
 
-    const { data, error } = await supabase
-      .from('sora_invite_usage')
-      .select(`${column}`)
-      .eq('invite_code', inviteCode)
-      .maybeSingle()
-
-    if (error) {
-      console.error('[sora-invite mark] fetch error', error)
-      return NextResponse.json({ success: false }, { status: 500 })
-    }
-
-    type InviteUsageRow = Partial<Record<SlotColumn, boolean>>
-    const row = (data ?? null) as InviteUsageRow | null
-
-    if (!row) {
-      return NextResponse.json({ success: false, reason: 'invite code not found' }, { status: 404 })
-    }
-
-    if (row[column]) {
-      return NextResponse.json({ success: false, reason: 'already used' }, { status: 409 })
-    }
-
-    const { error: updateError } = await supabase
+    const { data: updatedRows, error: updateError } = await supabase
       .from('sora_invite_usage')
       .update({ [column]: true })
       .eq('invite_code', inviteCode)
+      .eq(column, false)
+      .select('invite_code')
 
     if (updateError) {
       console.error('[sora-invite mark] update error', updateError)
       return NextResponse.json({ success: false }, { status: 500 })
+    }
+
+    if (!updatedRows || updatedRows.length === 0) {
+      const { data: exists } = await supabase
+        .from('sora_invite_usage')
+        .select('invite_code')
+        .eq('invite_code', inviteCode)
+        .maybeSingle()
+
+      if (!exists) {
+        return NextResponse.json({ success: false, reason: 'invite code not found' }, { status: 404 })
+      }
+
+      return NextResponse.json({ success: false, reason: 'already used' }, { status: 409 })
     }
 
     return NextResponse.json({ success: true })

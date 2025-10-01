@@ -6,6 +6,8 @@ import SubmitInviteForm from './SubmitInviteForm'
 import InviteListClient from './InviteListClient'
 import { generateSEOMetadata } from '@/lib/seo'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = generateSEOMetadata({
   title: 'Sora 2 Invite Codes – Community Share',
   description: 'Share and track Sora 2 invite codes for the community. Submit your code, mark used slots, and help others access Sora 2 freely.',
