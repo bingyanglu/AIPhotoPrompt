@@ -57,27 +57,59 @@ export default function PromptCard({ prompt }: PromptCardProps) {
       <h3 className="font-display text-2xl text-gray-900">
         {prompt.title}
       </h3>
-      {prompt.coverImage && (
-        <div className="mt-4 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-          <a
-            href={prompt.coverImage}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative block aspect-[4/3]"
-          >
-            <img
-              src={prompt.coverImage}
-              alt={prompt.title}
-              className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-[1.02]"
-              loading="lazy"
-            />
-            <span className="sr-only">View full size image</span>
-            <span className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-white/70 bg-black/60 px-3 py-1 text-xs font-medium text-white opacity-0 backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
-              View original
-            </span>
-          </a>
-        </div>
-      )}
+      {prompt.coverImage && (() => {
+        const mediaUrl = prompt.coverImage
+        const isVideo = /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(mediaUrl)
+
+        if (isVideo) {
+          return (
+            <div className="mt-4 overflow-hidden rounded-lg border border-gray-200 bg-black/5">
+              <div className="group relative block aspect-[4/3]">
+                <video
+                  className="h-full w-full object-cover object-center"
+                  controls
+                  playsInline
+                  preload="metadata"
+                >
+                  <source src={mediaUrl} />
+                  Your browser does not support the video tag.
+                </video>
+                <a
+                  href={mediaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pointer-events-auto absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full border border-white/70 bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur transition-transform duration-200 hover:translate-y-[1px]"
+                >
+                  View video
+                  <span aria-hidden>↗</span>
+                </a>
+              </div>
+            </div>
+          )
+        }
+
+        return (
+          <div className="mt-4 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+            <a
+              href={mediaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative block aspect-[4/3]"
+            >
+              <img
+                src={mediaUrl}
+                alt={prompt.title}
+                className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-[1.02]"
+                loading="lazy"
+              />
+              <span className="sr-only">View full size image</span>
+              <span className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-white/70 bg-black/60 px-3 py-1 text-xs font-medium text-white opacity-0 backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
+                View original
+              </span>
+            </a>
+          </div>
+        )
+      })()}
       <div className="mt-4 space-y-3">
         <div className="rounded-md border border-gray-200 bg-neutral-100 px-6 py-5">
           <p className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-800">

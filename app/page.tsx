@@ -58,18 +58,31 @@ const featuredCategories = [
 export default async function HomePage() {
   const siteDescription = metadata.description ?? 'Explore curated Gemini AI photo prompts and tutorials.'
 
-const latestPrompts = await getLatestPrompts(6)
-const promptPool = latestPrompts.length > 0 ? latestPrompts : await getPrompts()
-const selectedPrompts = promptPool.slice(0, 6)
+const latestPrompts = await getLatestPrompts(12)
+const allPrompts = latestPrompts.length > 0 ? latestPrompts : await getPrompts()
+let geminiPromptPool = allPrompts.filter((prompt) => !prompt.category.startsWith('sora-2-'))
+let soraPromptPool = allPrompts.filter((prompt) => prompt.category.startsWith('sora-2-'))
+
+if (geminiPromptPool.length < 6) {
+  const fullPrompts = await getPrompts()
+  geminiPromptPool = fullPrompts.filter((prompt) => !prompt.category.startsWith('sora-2-'))
+  if (soraPromptPool.length === 0) {
+    soraPromptPool = fullPrompts.filter((prompt) => prompt.category.startsWith('sora-2-'))
+  }
+}
+
+const selectedPrompts = geminiPromptPool.slice(0, 6)
 const showcasePrompts: ShowcasePrompt[] = selectedPrompts.map((prompt) => ({
   slug: prompt.slug,
   title: prompt.title,
-    description: prompt.description,
-    prompt: prompt.template,
-    coverImage: prompt.coverImage,
-    category: prompt.category,
-    useCase: prompt.useCase,
+  description: prompt.description,
+  prompt: prompt.template,
+  coverImage: prompt.coverImage,
+  category: prompt.category,
+  useCase: prompt.useCase,
 }))
+
+const soraHighlights = soraPromptPool.slice(0, 6)
 
 const blogPosts = await getBlogPosts()
 const featuredReads = blogPosts.filter((post) => post.featured).slice(0, 3)
@@ -121,26 +134,75 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
       <Header />
       <main>
         <HeroSection />
-        <section id="trending-prompts" className="bg-white py-20">
-          <div className="container-custom">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl text-gray-900">Latest Gemini AI Photo Prompts</h2>
-              <p className="mt-3 text-base text-gray-600">Fresh uploads direct from the catalog. Discover what just dropped and take it for a spin instantly.</p>
+       <section id="trending-prompts" className="bg-white py-20">
+         <div className="container-custom">
+           <div className="mx-auto max-w-2xl text-center">
+             <h2 className="font-display text-3xl text-gray-900">Latest Gemini AI Photo Prompts</h2>
+             <p className="mt-3 text-base text-gray-600">Fresh uploads direct from the catalog. Discover what just dropped and take it for a spin instantly.</p>
+           </div>
+           <div className="mt-12">
+             <PromptShowcase prompts={showcasePrompts} />
+           </div>
+           <div className="mt-10 flex justify-center">
+             <Link
+               href="/prompts"
+               className="inline-flex items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-5 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
+             >
+               View more prompts
+               <span aria-hidden>→</span>
+             </Link>
+           </div>
+         </div>
+       </section>
+
+        {soraHighlights.length > 0 && (
+          <section className="border-t border-gray-200 bg-gray-50 py-20">
+            <div className="container-custom">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="font-display text-3xl text-gray-900">Latest Sora 2 Prompts</h2>
+                <p className="mt-3 text-base text-gray-600">Audio-video ready recipes for Sora 2. Copy the prompt, fine-tune, and render your next sequence.</p>
+              </div>
+              <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {soraHighlights.map((prompt) => (
+                  <article key={prompt.slug} className="flex h-full flex-col justify-between rounded-lg border-2 border-gray-900 bg-white p-6 text-gray-900">
+                    <div className="space-y-4">
+                      <div className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+                        Sora 2 · {prompt.useCase}
+                      </div>
+                      <div>
+                        <h3 className="font-display text-xl text-gray-900">{prompt.title}</h3>
+                        <p className="mt-3 text-sm text-gray-600 leading-relaxed line-clamp-4">{prompt.description}</p>
+                      </div>
+                    </div>
+                    <div className="mt-6">
+                      <p className="rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-xs font-mono leading-relaxed text-gray-700 line-clamp-6">
+                        {prompt.template}
+                      </p>
+                    </div>
+                    <div className="mt-4 flex justify-end">
+                      <Link
+                        href={`/prompts/sora-2-prompt#prompt-${prompt.slug}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-gray-900 underline underline-offset-4 transition-colors hover:text-primary-600"
+                      >
+                        View Sora 2 prompt
+                        <span aria-hidden>→</span>
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="mt-10 flex justify-center">
+                <Link
+                  href="/prompts/sora-2-prompt"
+                  className="inline-flex items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-5 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
+                >
+                  View more Sora prompts
+                  <span aria-hidden>→</span>
+                </Link>
+              </div>
             </div>
-            <div className="mt-12">
-              <PromptShowcase prompts={showcasePrompts} />
-            </div>
-            <div className="mt-10 flex justify-center">
-              <Link
-                href="/prompts"
-                className="inline-flex items-center justify-center gap-2 rounded-md border-2 border-gray-900 px-5 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
-              >
-                View more prompts
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {featuredReads.length > 0 && (
           <section className="border-t border-gray-200 bg-gray-50 py-20">

@@ -10,7 +10,8 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
-  { label: 'Prompts', href: '/prompts' },
+  { label: 'Gemini AI Photo Prompt', href: '/prompts' },
+  { label: 'Sora 2 Prompt', href: '/prompts/sora-2-prompt' },
   { label: 'Blog', href: '/blog' }
 ]
 
