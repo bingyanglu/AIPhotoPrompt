@@ -41,6 +41,66 @@
       "seoDescription": "Copy paste the best Google Gemini AI photo editor prompts for polishing portraits, styling outfits, planning storyboards, and creating stickers."
     },
     {
+      "slug": "sora2-launch-audio-video-overview",
+      "title": "Sora 2 Launch Breakdown: OpenAI’s First Audio-Video Model and Remix App",
+      "description": "Key takeaways from the Sora 2 reveal—audio-video generation, Cameo remixing, invite codes, and rollout timeline.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-10-01",
+      "tags": [
+        "sora-2",
+        "openai",
+        "video-generation",
+        "audio-video"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/10/adbf2c2a37a612c1377e0a98eab59082.jpeg",
+      "category": "insights",
+      "featured": false,
+      "readTime": "8 min read",
+      "excerpt": "A quick guide to Sora 2’s audio-video breakthroughs, Cameo and Remix workflows, and how to get early access.",
+      "seoTitle": "Sora 2 Launch Breakdown – OpenAI’s Audio-Video Model and Remix App",
+      "seoDescription": "Explore Sora 2’s synchronized audio-video generation, Cameo remix features, invite codes, and rollout timeline in one quick read."
+    },
+    {
+      "slug": "sora2-hands-on-review",
+      "title": "Hands-On with Sora 2: Why OpenAI’s Video ChatGPT Moment Changes Everything",
+      "description": "A field test of Sora 2 covering sports physics, anime performance, digital avatars, and Cameo-powered creation.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-10-01",
+      "tags": [
+        "sora-2",
+        "openai",
+        "ai-video",
+        "review"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/10/dbea9fdbff19885bff35c7e8b02b9c41.png",
+      "category": "insights",
+      "featured": false,
+      "readTime": "10 min read",
+      "excerpt": "Real-world impressions of Sora 2’s physics, audio, anime modes, and digital-ID workflows after the launch event.",
+      "seoTitle": "Hands-On with Sora 2 – OpenAI’s Video ChatGPT Moment Explained",
+      "seoDescription": "See why Sora 2’s physics, audio, and avatar tools feel like the ChatGPT moment for AI video in this hands-on review."
+    },
+    {
+      "slug": "sora2-app-guide",
+      "title": "OpenAI’s Sora 2 App Guide: Features, Invite Codes, and How to Get Started",
+      "description": "Everything you need to know about the Sora app’s Cameo, Remix, pricing, invite codes, and rollout plan.",
+      "author": "AI Photo Prompt Lab Team",
+      "publishDate": "2025-10-01",
+      "tags": [
+        "sora-2",
+        "openai",
+        "sora-app",
+        "guide"
+      ],
+      "coverImage": "https://img.aiphotoprompt.net/2025/10/70a3f8b02f7d468bf61d8d3335014049.png",
+      "category": "insights",
+      "featured": false,
+      "readTime": "9 min read",
+      "excerpt": "Break down Sora 2’s app experience, Cameo and Remix gameplay, pricing, rollout schedule, and download links.",
+      "seoTitle": "OpenAI’s Sora 2 App Guide – Features, Invite Codes, Getting Started",
+      "seoDescription": "Learn what’s new in Sora 2, how the Cameo and Remix features work, and where to download the Sora app with invite codes and rollout details."
+    },
+    {
       "slug": "pokemon-style-photos-gemini-prompts",
       "title": "Pokémon-Style Photos – Google Gemini AI Photo Prompts Series",
       "description": "Four editorial Gemini prompts that pair realistic portraits with Pikachu, Charizard, Gengar, and Gyarados looks.",
