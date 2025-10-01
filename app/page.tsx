@@ -58,26 +58,27 @@ const featuredCategories = [
 export default async function HomePage() {
   const siteDescription = metadata.description ?? 'Explore curated Gemini AI photo prompts and tutorials.'
 
-  const latestPrompts = await getLatestPrompts(6)
-  const promptPool = latestPrompts.length > 0 ? latestPrompts : await getPrompts()
-  const selectedPrompts = promptPool.slice(0, 6)
-  const showcasePrompts: ShowcasePrompt[] = selectedPrompts.map((prompt) => ({
-    slug: prompt.slug,
-    title: prompt.title,
+const latestPrompts = await getLatestPrompts(6)
+const promptPool = latestPrompts.length > 0 ? latestPrompts : await getPrompts()
+const selectedPrompts = promptPool.slice(0, 6)
+const showcasePrompts: ShowcasePrompt[] = selectedPrompts.map((prompt) => ({
+  slug: prompt.slug,
+  title: prompt.title,
     description: prompt.description,
     prompt: prompt.template,
     coverImage: prompt.coverImage,
     category: prompt.category,
     useCase: prompt.useCase,
-  }))
+}))
 
-  const blogPosts = await getBlogPosts()
-  const latestBlogPosts = blogPosts.slice(0, 3)
-  const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
+const blogPosts = await getBlogPosts()
+const featuredReads = blogPosts.filter((post) => post.featured).slice(0, 3)
+const latestBlogPosts = blogPosts.slice(0, 3)
+const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+})
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -140,6 +141,60 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {featuredReads.length > 0 && (
+          <section className="border-t border-gray-200 bg-gray-50 py-20">
+            <div className="container-custom">
+              <div className="mb-10 text-center">
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Featured reads</span>
+                <h2 className="mt-3 font-display text-3xl text-gray-900">Curated stories for Gemini creators</h2>
+                <p className="mt-3 text-base text-gray-600">Dive deeper into the launches, workflows, and experiments shaping the prompt frontier.</p>
+              </div>
+              <div className="grid gap-8 md:grid-cols-3">
+                {featuredReads.map((post) => {
+                  const formattedDate = post.publishDate
+                    ? blogDateFormatter.format(new Date(post.publishDate))
+                    : null
+
+                  return (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="group flex h-full flex-col overflow-hidden rounded-lg border-2 border-gray-900 bg-white text-gray-900 transition-transform duration-200 hover:-translate-y-1"
+                    >
+                      {post.coverImage && (
+                        <figure className="relative aspect-[4/3] w-full overflow-hidden border-b border-gray-200 bg-gray-100">
+                          <img
+                            src={post.coverImage}
+                            alt={post.title}
+                            loading="lazy"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          />
+                        </figure>
+                      )}
+                      <div className="space-y-4 p-6">
+                        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+                          {post.category?.toUpperCase() || 'BLOG'}
+                          {formattedDate && (
+                            <span className="ml-2 normal-case tracking-normal text-gray-400">{formattedDate}</span>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-display text-xl text-gray-900">{post.title}</h3>
+                          <p className="mt-3 text-sm text-gray-600 leading-relaxed line-clamp-4">{post.description}</p>
+                        </div>
+                      </div>
+                      <span className="mt-auto flex items-center justify-end gap-2 border-t border-gray-200 px-6 py-4 text-sm font-semibold text-gray-900">
+                        Read now
+                        <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="border-y border-gray-200 bg-gray-50 py-20">
           <div className="container-custom">
