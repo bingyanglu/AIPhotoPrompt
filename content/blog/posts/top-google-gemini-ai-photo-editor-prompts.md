@@ -10,7 +10,7 @@ tags:
   - prompts
   - copy-paste
 category: insights
-featured: false
+featured: true
 seoTitle: Top 25 Google Gemini AI Photo Editor Prompts Copy Paste (Trending Retouch & Outfit Hacks)
 seoDescription: Grab the top Google Gemini AI photo editor prompts to copy paste for retouching, outfit swaps, storyboards, and more.
 coverImage: https://img.aiphotoprompt.net/2025/09/47ac7314545bd038f62c1019c2c5a42c.png

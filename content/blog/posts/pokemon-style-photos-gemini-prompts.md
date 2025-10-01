@@ -9,7 +9,7 @@ tags:
   - photo-prompts
   - editorial
 category: insights
-featured: false
+featured: true
 seoTitle: Pokémon-Style Photos – Gemini AI Prompt Series | AI Photo Prompt Lab
 seoDescription: Explore a four-look Gemini AI prompt series that turns portraits into Pokémon-inspired editorial photos starring Pikachu, Charizard, Gengar, and Gyarados.
 coverImage: https://img.aiphotoprompt.net/2025/09/a05367db1026e8734e7a2295dc031b1a.png

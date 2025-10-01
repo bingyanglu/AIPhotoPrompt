@@ -9,7 +9,7 @@ tags:
   - ai-video
   - review
 category: insights
-featured: false
+featured: true
 seoTitle: Hands-On with Sora 2 – OpenAI’s Video ChatGPT Moment Explained
 seoDescription: A field test of Sora 2 covering sports physics, anime performance, digital avatar workflows, and Cameo-powered social creation.
 coverImage: https://img.aiphotoprompt.net/2025/10/dbea9fdbff19885bff35c7e8b02b9c41.png

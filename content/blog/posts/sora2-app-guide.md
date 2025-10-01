@@ -9,7 +9,7 @@ tags:
   - sora-app
   - guide
 category: insights
-featured: false
+featured: true
 seoTitle: OpenAI’s Sora 2 App Guide – Features, Invite Codes, Getting Started
 seoDescription: Learn what’s new in Sora 2, how the Cameo and Remix features work, and where to download the Sora app with invite codes and rollout details.
 coverImage: https://img.aiphotoprompt.net/2025/10/70a3f8b02f7d468bf61d8d3335014049.png
