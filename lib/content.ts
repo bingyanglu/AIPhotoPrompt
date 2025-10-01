@@ -510,6 +510,8 @@ export async function generateSitemap(): Promise<string[]> {
     // Static pages that exist in the app router
     urls.add('/')
     urls.add('/prompts')
+    urls.add('/prompts/sora-2-prompt')
+    urls.add('/sora-2-invite-codes')
     urls.add('/blog')
     urls.add('/legal/privacy-policy')
     urls.add('/legal/terms-of-service')

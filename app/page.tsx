@@ -8,6 +8,7 @@ import PromptShowcase, { type ShowcasePrompt } from '@/components/PromptShowcase
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { getLatestPrompts, getPrompts, getBlogPosts } from '@/lib/content'
 import { SITE_CONFIG } from '@/lib/seo'
+import HomeSectionNav from '@/components/HomeSectionNav'
 
 export const metadata: Metadata = {
   title: 'Gemini AI Photo Prompts – Copy & Paste Ready',
@@ -133,8 +134,9 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
     <div className="min-h-screen bg-white">
       <Header />
       <main>
+        <HomeSectionNav />
         <HeroSection />
-       <section id="trending-prompts" className="bg-white py-20">
+        <section id="trending-prompts" className="bg-white py-20">
          <div className="container-custom">
            <div className="mx-auto max-w-2xl text-center">
              <h2 className="font-display text-3xl text-gray-900">Latest Gemini AI Photo Prompts</h2>
@@ -156,7 +158,7 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
        </section>
 
         {soraHighlights.length > 0 && (
-          <section className="border-t border-gray-200 bg-gray-50 py-20">
+          <section id="sora-prompts" className="border-t border-gray-200 bg-gray-50 py-20">
             <div className="container-custom">
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-display text-3xl text-gray-900">Latest Sora 2 Prompts</h2>
@@ -205,7 +207,7 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
         )}
 
         {featuredReads.length > 0 && (
-          <section className="border-t border-gray-200 bg-gray-50 py-20">
+          <section id="featured-reads" className="border-t border-gray-200 bg-gray-50 py-20">
             <div className="container-custom">
               <div className="mb-10 text-center">
                 <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Featured reads</span>
@@ -258,7 +260,7 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
           </section>
         )}
 
-        <section className="border-y border-gray-200 bg-gray-50 py-20">
+        <section id="categories-grid" className="border-y border-gray-200 bg-gray-50 py-20">
           <div className="container-custom">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl">
@@ -294,7 +296,7 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section id="benefits" className="bg-white py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl text-gray-900">Why creators choose AI Photo Prompt Lab</h2>
@@ -313,7 +315,7 @@ const blogDateFormatter = new Intl.DateTimeFormat('en-US', {
           </div>
         </section>
 
-        <section className="border-t border-gray-200 bg-gray-50 py-20">
+        <section id="learn-prompting" className="border-t border-gray-200 bg-gray-50 py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl text-gray-900">Learn prompting faster</h2>
